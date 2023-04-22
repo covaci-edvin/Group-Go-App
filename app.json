@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "group-go-app-native",
+    "slug": "group-go-app-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

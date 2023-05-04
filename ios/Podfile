@@ -38,6 +38,11 @@ elsif podfile_properties.key?('ios.flipper') then
   end
 end
 
+pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
+
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-google-maps', :path => rn_maps_path
+
 target 'groupgoappnative' do
   use_expo_modules!
   config = use_native_modules!
@@ -57,6 +62,7 @@ target 'groupgoappnative' do
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
     :flipper_configuration => flipper_config
   )
+
 
   post_install do |installer|
     react_native_post_install(

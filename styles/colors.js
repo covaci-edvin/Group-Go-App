@@ -1,0 +1,15 @@
+export const Colors = {
+  primary: "#6DABB6",
+  primaryShade: "#6E9CE0",
+  primaryTint: "#B7CCEC",
+  primaryTintLighter: "#DEE7F4",
+  primaryLight: "#f8fafc",
+  primaryDark: "#283132",
+  primaryDarkLighter: "#525E60",
+  primaryDarkEvenLighter: "#CDD5D6",
+  amber: "#fde68a",
+  red: "#f87171",
+  redLight: "#FFEFEF",
+  gradientBlue: "#6E9CE0",
+  gradientBlueLight: "#9ABEF4",
+};

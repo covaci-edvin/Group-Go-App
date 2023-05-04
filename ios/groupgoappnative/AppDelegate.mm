@@ -2,11 +2,14 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+#import <GoogleMaps/GoogleMaps.h>
+
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyAVGmSdRezL3utbyBTGDjMgvMcWxqhVDJ8"]; 
   self.moduleName = @"main";
 
   // You can add your custom initial props in the dictionary below.

@@ -4,11 +4,13 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAccount } from "../slices/accountSlice";
 import { API_BASE_URL } from "@env";
+import { setGroups } from "../slices/groupsSlice";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [componentIsLoading, setComponentIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const [signupErrorMessage, setSignupErrorMessage] = useState("");
@@ -29,10 +31,28 @@ export const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         console.log("setCurrentAccountError");
-
         console.log(err.response.data.message);
       });
     setIsLoading(false);
+  };
+
+  const getGroups = async () => {
+    setComponentIsLoading(true);
+    await axios
+      .get(`${API_BASE_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.data.data.groups);
+        dispatch(setGroups(res.data.data.data.groups));
+      })
+      .catch((err) => {
+        console.log("getGroupsError");
+        console.log(err.response.data.message);
+      });
+    setComponentIsLoading(false);
   };
 
   const createGroup = async (groupName, groupDescription) => {
@@ -85,7 +105,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password, passwordConfirm) => {
     setIsLoading(true);
-    await axios
+    axios
       .post(`${API_BASE_URL}/users/signup`, {
         name,
         email,
@@ -105,6 +125,28 @@ export const AuthProvider = ({ children }) => {
         console.log(err);
       });
     setIsLoading(false);
+  };
+
+  const addMember = async (groupId, email) => {
+    axios
+      .patch(
+        `${API_BASE_URL}/groups/${groupId}`,
+        {
+          email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        setCurrentAccount(userToken);
+      })
+      .catch((err) => {
+        console.log("updateGroupError");
+        console.log(err.response.data);
+      });
   };
 
   const logout = () => {
@@ -145,9 +187,11 @@ export const AuthProvider = ({ children }) => {
         signup,
         logout,
         createGroup,
+        getGroups,
         userInfo,
         setCurrentAccount,
         isLoading,
+        componentIsLoading,
         userToken,
         loginErrorMessage,
         signupErrorMessage,

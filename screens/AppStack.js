@@ -1,15 +1,22 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MapScreen from "./MapScreen";
 import Account from "../components/Account";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../styles/colors";
 import GroupsStack from "./GroupsStack";
+import { AuthContext } from "../context/AuthContext";
 
 const Drawer = createDrawerNavigator();
 
 const AppStack = (props) => {
+  const { getGroups } = useContext(AuthContext);
+  // console.log(data);
+
+  useEffect(() => {
+    getGroups();
+  }, []);
   return (
     <Drawer.Navigator
       drawerContent={(props) => <Account {...props} />}

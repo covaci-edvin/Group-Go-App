@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import React, { useContext } from "react";
 import { DrawerItemList } from "@react-navigation/drawer";
-import { useSelector } from "react-redux";
-import { selectAccount } from "../slices/accountSlice";
 import tw from "twrnc";
 import safeViewAndroid from "../utils/safeViewAndroid";
 
@@ -17,17 +15,15 @@ import { Feather, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
 
 const Account = (props) => {
-  const { account } = useSelector(selectAccount);
-  const { logout } = useContext(AuthContext);
-
+  const { logout, userInfo } = useContext(AuthContext);
   return (
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
       <View style={tw`flex-1`}>
         <View style={[tw`h-23 justify-end gap-1`, styles.account]}>
           <Text numberOfLines={1} style={[tw`text-3xl`, styles.name]}>
-            {account.name}
+            {userInfo.user.name}
           </Text>
-          <Text style={[styles.email]}>{account.email}</Text>
+          <Text style={[styles.email]}>{userInfo.user.email}</Text>
 
           <TouchableOpacity style={[tw`absolute top-2 right-2`, styles.edit]}>
             <Feather name="edit" size={20} color={Colors.primaryDark} />

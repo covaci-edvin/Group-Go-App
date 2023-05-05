@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import tw from "twrnc";
 import { Colors } from "../styles/colors";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Member = ({ item, adminId, toggleModal, setDeleteMemberName }) => {
   const toggleAndSetNameHandler = () => {

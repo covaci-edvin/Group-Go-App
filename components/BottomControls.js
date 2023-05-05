@@ -14,6 +14,11 @@ import { selectIsGroupSelected } from "../slices/uiToggleSlice";
 import { Colors } from "../styles/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
 const BottomControls = ({ navigation }) => {
   const isGroupSelected = useSelector(selectIsGroupSelected);
@@ -21,25 +26,43 @@ const BottomControls = ({ navigation }) => {
 
   const [containerHeight, setContainerHeight] = useState();
 
+  const progress = useSharedValue(75 + insets.bottom);
+
+  const reanimatedStyle = useAnimatedStyle(() => {
+    return {
+      height: progress.value,
+    };
+  }, []);
+
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", () => {
-      setContainerHeight(75);
+      progress.value = withSpring(75, { damping: 30 });
     });
-    Keyboard.addListener("keyboardDidHide", () => {
-      setContainerHeight(75 + insets.bottom);
+    Keyboard.addListener("keyboardWillHide", () => {
+      progress.value = withSpring(75 + insets.bottom, { damping: 30 });
     });
   }, []);
 
+  // useEffect(() => {
+  //   Keyboard.addListener("keyboardDidShow", () => {
+  //     setContainerHeight(75);
+  //   });
+  //   Keyboard.addListener("keyboardDidHide", () => {
+  //     setContainerHeight(75 + insets.bottom);
+  //   });
+  // }, []);
+
   return (
-    <View
+    <Animated.View
       style={[
         tw`absolute w-full z-10 bottom-0 rounded-t-3xl`,
         styles.container,
+        reanimatedStyle,
       ]}
     >
       <LinearGradient
         colors={[Colors.gradientBlueLight, Colors.gradientBlue]}
-        style={[tw`flex-1 rounded-t-3xl`, { height: 75 + insets.bottom }]}
+        style={[tw`flex-1 rounded-t-3xl`]}
       >
         {/* <View style={tw`mx-10 flex-1 flex-row items-center justify-between`}>
         <TouchableOpacity style={tw`w-15 h-15 justify-center items-center`}>
@@ -86,7 +109,7 @@ const BottomControls = ({ navigation }) => {
           </TouchableOpacity>
         </SafeAreaView>
       </LinearGradient>
-    </View>
+    </Animated.View>
   );
 };
 

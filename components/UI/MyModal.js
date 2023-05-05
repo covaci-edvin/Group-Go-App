@@ -5,7 +5,7 @@ import { Colors } from "../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import tw from "twrnc";
 
-const MyModal = ({ message, isVisible, toggleModal, title }) => {
+const MyModal = ({ message, isVisible, toggleModal, title, name }) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -27,8 +27,16 @@ const MyModal = ({ message, isVisible, toggleModal, title }) => {
         <Text style={[tw`text-center text-lg mb-1 mt-2`, styles.title]}>
           {title}
         </Text>
-        <Text style={[tw`text-center text-sm mb-3`, styles.message]}>
+        <Text style={[tw`text-center text-sm mb-1`, styles.message]}>
           {message}
+        </Text>
+        <Text
+          style={[
+            tw`mb-3 text-center text-sm font-bold`,
+            { color: Colors.primaryDark },
+          ]}
+        >
+          {name}
         </Text>
 
         <View style={tw`flex-row justify-between`}>

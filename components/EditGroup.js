@@ -114,7 +114,11 @@ const EditGroup = ({ group }) => {
               </Animated.View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[tw`items-center`]} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={[tw`items-center`]}
+              activeOpacity={0.7}
+              onPress={handleSubmit}
+            >
               <Animated.View
                 style={[
                   tw`rounded-full px-5 ml-3 py-2`,
@@ -161,5 +165,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.primaryLight,
     fontWeight: 600,
+  },
+  errors: {
+    fontSize: 14,
+    color: Colors.red,
+    marginHorizontal: 23,
   },
 });

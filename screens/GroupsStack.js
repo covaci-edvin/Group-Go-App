@@ -35,14 +35,6 @@ const GroupsStack = (props) => {
         }}
         navigation={props.navigation}
       />
-      <Stack.Screen
-        name="EditGroup"
-        component={EditGroup}
-        options={{
-          headerShown: false,
-        }}
-        navigation={props.navigation}
-      />
     </Stack.Navigator>
   );
 };

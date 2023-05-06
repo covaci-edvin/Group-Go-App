@@ -2,10 +2,10 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { useDispatch } from "react-redux";
-import { setDestination } from "../slices/navigationSlice";
+import { setDestination } from "../../slices/navigationSlice";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_APIKEY } from "@env";
-import { Colors } from "../styles/colors";
+import { Colors } from "../../styles/colors";
 
 const DestinationSearch = () => {
   const dispatch = useDispatch();

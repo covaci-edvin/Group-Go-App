@@ -1,10 +1,9 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SelectGroup from "../components/SelectGroup";
-import CreateGroup from "../components/CreateGroup";
-import GroupInfo from "../components/GroupInfo";
-import EditGroup from "../components/EditGroup";
+import SelectGroup from "../screens/SelectGroup";
+import CreateGroup from "../screens/CreateGroup";
+import GroupInfo from "../screens/GroupInfo";
 
 const Stack = createNativeStackNavigator();
 

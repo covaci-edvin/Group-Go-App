@@ -5,14 +5,13 @@ import { Dimensions } from "react-native";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
-
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
 import DestinationSearch from "./DestinationSearch";
-import { Colors } from "../styles/colors";
+import { Colors } from "../../styles/colors";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 

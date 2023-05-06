@@ -1,10 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import navigationReducer from "./slices/navigationSlice";
-import uiToggleReducer from "./slices/uiToggleSlice";
-import accountReducer from "./slices/accountSlice";
-
-import editGroupReducer from "./slices/editGroupSlice";
-import groupsReducer from "./slices/groupsSlice";
+import navigationReducer from "./src/slices/navigationSlice";
+import uiToggleReducer from "./src/slices/uiToggleSlice";
+import accountReducer from "./src/slices/accountSlice";
+import editGroupReducer from "./src/slices/editGroupSlice";
+import groupsReducer from "./src/slices/groupsSlice";
 
 export const store = configureStore({
   reducer: {

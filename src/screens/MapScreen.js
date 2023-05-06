@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import Map from "../components/Map";
-import BottomControls from "../components/BottomControls";
-import BottomSheet from "../components/BottomSheet";
-import TopControls from "../components/TopControls";
-import Account from "../components/Account";
+import Map from "../components/Map/Map";
+import BottomControls from "../components/Map/BottomControls";
+import BottomSheet from "../components/Map/BottomSheet";
+import TopControls from "../components/Map/TopControls";
 
 const MapScreen = (props) => {
   return (

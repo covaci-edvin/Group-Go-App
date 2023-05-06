@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect } from "react";
 import tw from "twrnc";
-import { Colors } from "../styles/colors";
+import { Colors } from "../../styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,

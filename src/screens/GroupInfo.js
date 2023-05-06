@@ -1,24 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
-import React, { useContext, useState, useEffect } from "react";
+import { StyleSheet, View, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
 import safeViewAndroid from "../utils/safeViewAndroid";
 import { Colors } from "../styles/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useSelector } from "react-redux";
 import { selectEditGroup } from "../slices/editGroupSlice";
-import MyAlertModal from "./UI/MyAlertModal";
-import EditGroup from "./EditGroup";
-import Members from "./Members";
-import AddMember from "./AddMember";
+import MyAlertModal from "../components/UI/MyAlertModal";
+import EditGroup from "../components/Group/EditGroup";
+import Members from "../components/Group/Members";
+import AddMember from "../components/Group/AddMember";
 import { AuthContext } from "../context/AuthContext";
-import MyResponseModal from "./UI/MyResponseModal";
-import GroupHeaderInfo from "./GroupHeaderInfo";
+import MyResponseModal from "../components/UI/MyResponseModal";
+import GroupHeaderInfo from "../components/Group/GroupHeaderInfo";
 
 const GroupInfo = ({ navigation }) => {
   const { group } = useSelector(selectEditGroup);
@@ -57,18 +51,20 @@ const GroupInfo = ({ navigation }) => {
     deleteMember(group.id, deleteMemberEmail);
   };
 
-  const deleteGroupHandler = () => {
-    deleteGroup(group.id);
+  const goBackAfterOneSecond = () => {
     setTimeout(() => {
       navigation.goBack();
     }, 1000);
   };
 
+  const deleteGroupHandler = () => {
+    deleteGroup(group.id);
+    goBackAfterOneSecond();
+  };
+
   const leaveGroupHandler = () => {
     leaveGroup(group.id, userInfo.user.email);
-    setTimeout(() => {
-      navigation.goBack();
-    }, 1000);
+    goBackAfterOneSecond();
   };
 
   return (

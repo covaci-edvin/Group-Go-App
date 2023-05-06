@@ -7,10 +7,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { object, ref, string } from "yup";
 import { Formik } from "formik";
-import Input from "./UI/Input";
-import { Colors } from "../styles/colors";
+import Input from "../UI/Input";
+import { Colors } from "../../styles/colors";
 import tw from "twrnc";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 let editGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),

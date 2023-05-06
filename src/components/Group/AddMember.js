@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import React, { useContext, useRef, useState } from "react";
-import AddMemberButton from "./UI/AddMemberButton";
-import { Colors } from "../styles/colors";
+import AddMemberButton from "../UI/AddMemberButton";
+import { Colors } from "../../styles/colors";
 import tw from "twrnc";
 import Animated, {
   useSharedValue,
@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { object, string } from "yup";
 import { Formik } from "formik";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 let editGroupValidationSchema = object({
   email: string()

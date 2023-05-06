@@ -5,18 +5,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useSelector } from "react-redux";
-import { selectAccount } from "../slices/accountSlice";
+
 import { Colors } from "../styles/colors";
 import { AntDesign } from "@expo/vector-icons";
 import tw from "twrnc";
 import safeViewAndroid from "../utils/safeViewAndroid";
 import { selectIsGroupSelected } from "../slices/uiToggleSlice";
-import GroupsList from "./GroupsList";
+import GroupsList from "../components/Group/GroupsList";
 import { AuthContext } from "../context/AuthContext";
-import { selectGroups } from "../slices/groupsSlice";
-import Button from "./UI/Button";
+import Button from "../components/UI/Button";
 
 const Groups = ({ navigation }) => {
   const isGroupSelected = useSelector(selectIsGroupSelected);

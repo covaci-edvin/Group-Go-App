@@ -5,8 +5,8 @@ import {
   View,
 } from "react-native";
 import React, { useContext } from "react";
-import AppStack from "./AppStack";
-import AuthStack from "./AuthStack";
+import AppStack from "../navigation/AppStack";
+import AuthStack from "../navigation/AuthStack";
 import { AuthContext } from "../context/AuthContext";
 
 const AppNav = () => {

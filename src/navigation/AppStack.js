@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import MapScreen from "./MapScreen";
-import Account from "../components/Account";
+import MapScreen from "../screens/MapScreen";
+import Account from "../screens/Account";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../styles/colors";
 import GroupsStack from "./GroupsStack";
@@ -12,7 +12,6 @@ const Drawer = createDrawerNavigator();
 
 const AppStack = (props) => {
   const { getGroups } = useContext(AuthContext);
-  // console.log(data);
 
   useEffect(() => {
     getGroups();

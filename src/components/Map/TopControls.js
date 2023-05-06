@@ -1,17 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Colors } from "../styles/colors";
-import safeViewAndroid from "../utils/safeViewAndroid";
+import { Colors } from "../../styles/colors";
+import safeViewAndroid from "../../utils/safeViewAndroid";
 
 const gradientColors = [Colors.primaryLight, Colors.primaryLight];
 

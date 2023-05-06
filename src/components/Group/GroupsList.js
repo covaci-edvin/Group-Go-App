@@ -1,9 +1,9 @@
-import { StyleSheet, FlatList, View } from "react-native";
-import React, { useCallback, useState, useEffect, useMemo } from "react";
+import { StyleSheet, FlatList } from "react-native";
+import React, { useCallback } from "react";
 import Group from "./Group";
 import tw from "twrnc";
 import { useSelector } from "react-redux";
-import { selectGroups } from "../slices/groupsSlice";
+import { selectGroups } from "../../slices/groupsSlice";
 
 const GroupsList = ({ navigation, accountId }) => {
   const { groups } = useSelector(selectGroups);

@@ -1,15 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import tw from "twrnc";
-import { Colors } from "../styles/colors";
+import { Colors } from "../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import StatusLabel from "./StatusLabel";
 import { useDispatch } from "react-redux";
-import { setEditGroup } from "../slices/editGroupSlice";
+import { setEditGroup } from "../../slices/editGroupSlice";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 

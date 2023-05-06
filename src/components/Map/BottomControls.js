@@ -4,14 +4,13 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Keyboard,
-  View,
 } from "react-native";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { selectIsGroupSelected } from "../slices/uiToggleSlice";
-import { Colors } from "../styles/colors";
+import { selectIsGroupSelected } from "../../slices/uiToggleSlice";
+import { Colors } from "../../styles/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -23,8 +22,6 @@ import Animated, {
 const BottomControls = ({ navigation }) => {
   const isGroupSelected = useSelector(selectIsGroupSelected);
   const insets = useSafeAreaInsets();
-
-  const [containerHeight, setContainerHeight] = useState();
 
   const progress = useSharedValue(75 + insets.bottom);
 

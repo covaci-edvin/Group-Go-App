@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import { Colors } from "../styles/colors";
+import { Colors } from "../../styles/colors";
 
 const StatusLabel = ({ status, color }) => {
   return (

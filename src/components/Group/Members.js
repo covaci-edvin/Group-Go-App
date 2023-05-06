@@ -1,18 +1,11 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Colors } from "../styles/colors";
+import React, { useCallback, useContext } from "react";
+import { Colors } from "../../styles/colors";
 import tw from "twrnc";
 import Member from "./Member";
 import { useSelector } from "react-redux";
-import { selectGroups } from "../slices/groupsSlice";
-import { selectEditGroup } from "../slices/editGroupSlice";
-import { AuthContext } from "../context/AuthContext";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import { selectEditGroup } from "../../slices/editGroupSlice";
+import { AuthContext } from "../../context/AuthContext";
 
 const Members = ({ toggleModal, setDeleteMember, accountUserId }) => {
   const { group } = useSelector(selectEditGroup);
@@ -41,14 +34,14 @@ const Members = ({ toggleModal, setDeleteMember, accountUserId }) => {
           {group.members.length === 1 ? "member" : "members"}
         </Text>
       </View>
-      <Animated.View>
+      <View>
         <FlatList
           style={[tw`grow-0`, styles.flatlist]}
           data={group.members}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
         />
-      </Animated.View>
+      </View>
       {componentIsLoading && <Text>loading</Text>}
     </View>
   );

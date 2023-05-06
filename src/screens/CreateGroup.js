@@ -1,10 +1,8 @@
 import {
-  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -15,9 +13,9 @@ import { Colors } from "../styles/colors";
 import { AntDesign } from "@expo/vector-icons";
 import safeViewAndroid from "../utils/safeViewAndroid";
 import tw from "twrnc";
-import Input from "./UI/Input";
+import Input from "../components/UI/Input";
 import { AuthContext } from "../context/AuthContext";
-import Button from "./UI/Button";
+import Button from "../components/UI/Button";
 
 let createGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),

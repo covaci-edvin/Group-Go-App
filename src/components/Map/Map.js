@@ -4,11 +4,14 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import tw from "twrnc";
 import * as Location from "expo-location";
 import { useSelector, useDispatch } from "react-redux";
-import { selectDestination, setDestination } from "../slices/navigationSlice";
+import {
+  selectDestination,
+  setDestination,
+} from "../../slices/navigationSlice";
 
-import { MapStyles } from "../styles/mapStyles";
-import { mapPadding } from "../styles/mapPadding";
-import { Colors } from "../styles/colors";
+import { MapStyles } from "../../styles/mapStyles";
+import { mapPadding } from "../../styles/mapPadding";
+import { Colors } from "../../styles/colors";
 
 const Map = () => {
   const destination = useSelector(selectDestination);

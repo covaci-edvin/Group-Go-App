@@ -5,57 +5,167 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import safeViewAndroid from "../utils/safeViewAndroid";
 import { Colors } from "../styles/colors";
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useSelector } from "react-redux";
 import { selectEditGroup } from "../slices/editGroupSlice";
-import MyModal from "./UI/MyModal";
+import MyAlertModal from "./UI/MyAlertModal";
 import EditGroup from "./EditGroup";
 import Members from "./Members";
 import AddMember from "./AddMember";
+import { AuthContext } from "../context/AuthContext";
+import MyResponseModal from "./UI/MyResponseModal";
+import GroupHeaderInfo from "./GroupHeaderInfo";
 
 const GroupInfo = ({ navigation }) => {
   const { group } = useSelector(selectEditGroup);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isDeleteGroupModalVisible, setIsDeleteGroupModalVisible] =
+    useState(false);
+  const [isLeaveModalVisible, setIsLeaveModalVisible] = useState(false);
   const [deleteMemberName, setDeleteMemberName] = useState();
+  const [deleteMemberEmail, setDeleteMemberEmail] = useState();
+  const {
+    addMemberErrorMessage,
+    userInfo,
+    deleteMember,
+    deleteGroup,
+    leaveGroup,
+  } = useContext(AuthContext);
 
-  const toggleModal = () => {
+  const toggleDeleteMemberModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const setDeleteMemberNameHandler = (payload) => {
-    setDeleteMemberName(payload);
+  const toggleDeleteGroupModal = () => {
+    setIsDeleteGroupModalVisible(!isDeleteGroupModalVisible);
+  };
+
+  const toggleLeaveModal = () => {
+    setIsLeaveModalVisible(!isLeaveModalVisible);
+  };
+
+  const setDeleteMemberHandler = (name, email) => {
+    setDeleteMemberName(name);
+    setDeleteMemberEmail(email);
+  };
+
+  const deleteMemberHandler = () => {
+    deleteMember(group.id, deleteMemberEmail);
+  };
+
+  const deleteGroupHandler = () => {
+    deleteGroup(group.id);
+    setTimeout(() => {
+      navigation.goBack();
+    }, 1000);
+  };
+
+  const leaveGroupHandler = () => {
+    leaveGroup(group.id, userInfo.user.email);
+    setTimeout(() => {
+      navigation.goBack();
+    }, 1000);
   };
 
   return (
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
-      <MyModal
+      {addMemberErrorMessage && (
+        <MyResponseModal
+          message={
+            "We have sent an email just to let him know that you need him here 🙂"
+          }
+          title={"User does not exist!"}
+        />
+      )}
+      <MyAlertModal
+        onConfirmHandler={deleteMemberHandler}
         title={`Delete Member`}
         message={`You're going to delete:`}
         name={deleteMemberName}
         isVisible={isModalVisible}
-        toggleModal={toggleModal}
+        toggleModal={toggleDeleteMemberModal}
       />
-      <View style={tw`flex-row items-center justify-between mx-6`}>
-        <Text style={[tw`text-xl`, styles.textHeader]}>About</Text>
+      <MyAlertModal
+        onConfirmHandler={deleteGroupHandler}
+        title={`Delete Group`}
+        message={`You're going to delete:`}
+        name={group.name}
+        isVisible={isDeleteGroupModalVisible}
+        toggleModal={toggleDeleteGroupModal}
+      />
+      <MyAlertModal
+        onConfirmHandler={leaveGroupHandler}
+        title={`Leave Group`}
+        message={`You're going to leave group:`}
+        name={group.name}
+        isVisible={isLeaveModalVisible}
+        toggleModal={toggleLeaveModal}
+        confirmButtonMessage={"Yes, Leave!"}
+        cancelButtonMessage={"No, Stay!"}
+      />
+      <View
+        style={[
+          tw`flex-row items-center justify-between`,
+          styles.headerContainer,
+        ]}
+      >
         <TouchableOpacity
-          style={tw`h-10 w-10 items-end justify-center`}
+          style={tw`h-10 w-10 items-center justify-center`}
           onPress={() => navigation.goBack()}
         >
-          <AntDesign name="close" size={24} color={Colors.primaryDarkLighter} />
+          <Ionicons
+            name="chevron-back"
+            size={24}
+            color={Colors.primaryDarkLighter}
+          />
         </TouchableOpacity>
+        {userInfo.user.id === group.admin.id ? (
+          <TouchableOpacity
+            style={tw`h-10 w-10 items-center justify-center`}
+            onPress={() => {
+              toggleDeleteGroupModal();
+            }}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={24}
+              color={Colors.primaryDarkLighter}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={tw`h-10 w-10 items-center justify-center`}
+            onPress={() => {
+              toggleLeaveModal();
+            }}
+          >
+            <Ionicons
+              name="exit-outline"
+              size={24}
+              color={Colors.primaryDarkLighter}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       <View style={tw`flex-1`}>
-        <EditGroup group={group} />
+        {userInfo.user.id === group.admin.id ? (
+          <EditGroup group={group} />
+        ) : (
+          <GroupHeaderInfo group={group} />
+        )}
         <Members
-          group={group}
-          toggleModal={toggleModal}
-          setDeleteMemberName={setDeleteMemberNameHandler}
+          groupId={group.id}
+          accountUserId={userInfo.user.id}
+          toggleModal={toggleDeleteMemberModal}
+          setDeleteMember={setDeleteMemberHandler}
         />
-        <AddMember />
+        {userInfo.user.id === group.admin.id && (
+          <AddMember groupId={group.id} />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -71,5 +181,8 @@ const styles = StyleSheet.create({
   textHeader: {
     color: Colors.primaryDarkLighter,
     fontWeight: 600,
+  },
+  headerContainer: {
+    marginHorizontal: 10,
   },
 });

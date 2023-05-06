@@ -1,10 +1,11 @@
 import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAccount } from "../slices/accountSlice";
 import { API_BASE_URL } from "@env";
-import { setGroups } from "../slices/groupsSlice";
+import { selectGroups, setGroups } from "../slices/groupsSlice";
+import { setEditGroup } from "../slices/editGroupSlice";
 
 export const AuthContext = createContext();
 
@@ -14,12 +15,32 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const [signupErrorMessage, setSignupErrorMessage] = useState("");
+  const [addMemberErrorMessage, setAddMemberErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState(null);
   const dispatch = useDispatch();
+  const { groups } = useSelector(selectGroups);
+
+  const replaceGroup = (groupId, updatedGroup) => {
+    try {
+      const updatedGroups = groups.map((group) => {
+        if (group.id === groupId) {
+          dispatch(setEditGroup(updatedGroup));
+          return updatedGroup;
+        } else return group;
+      });
+      dispatch(setGroups(updatedGroups));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeGroup = (groupId) => {
+    const updatedGroups = groups.filter((group) => group.id !== groupId);
+    dispatch(setGroups(updatedGroups));
+  };
 
   const setCurrentAccount = async (userToken) => {
     setIsLoading(true);
-
     await axios
       .get(`${API_BASE_URL}/users/me`, {
         headers: {
@@ -45,39 +66,13 @@ export const AuthProvider = ({ children }) => {
         },
       })
       .then((res) => {
-        // console.log(res.data.data.data.groups);
         dispatch(setGroups(res.data.data.data.groups));
       })
       .catch((err) => {
         console.log("getGroupsError");
-        console.log(err.response.data.message);
+        console.log(err);
       });
     setComponentIsLoading(false);
-  };
-
-  const createGroup = async (groupName, groupDescription) => {
-    setIsLoading(true);
-    axios
-      .post(
-        `${API_BASE_URL}/users/groups`,
-        {
-          name: groupName,
-          description: groupDescription,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      )
-      .then((res) => {
-        setCurrentAccount(userToken);
-      })
-      .catch((err) => {
-        console.log("createGroupError");
-        console.log(err.response.data);
-      });
-    setIsLoading(false);
   };
 
   const login = async (email, password) => {
@@ -128,11 +123,79 @@ export const AuthProvider = ({ children }) => {
   };
 
   const addMember = async (groupId, email) => {
+    setComponentIsLoading(true);
     axios
-      .patch(
-        `${API_BASE_URL}/groups/${groupId}`,
+      .post(
+        `${API_BASE_URL}/groups/${groupId}/members`,
         {
           email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        replaceGroup(groupId, res.data.data.group);
+      })
+      .catch((err) => {
+        setAddMemberErrorMessage(err.response.data.message);
+      });
+    setComponentIsLoading(false);
+  };
+
+  const deleteMember = async (groupId, email) => {
+    setComponentIsLoading(true);
+    axios
+      .delete(`${API_BASE_URL}/groups/${groupId}/members`, {
+        data: {
+          email,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        replaceGroup(groupId, res.data.data.group);
+      })
+      .catch((err) => {
+        console.log("removeMemberError", err.data);
+      });
+    setComponentIsLoading(false);
+  };
+
+  const leaveGroup = async (groupId, email) => {
+    setComponentIsLoading(true);
+    axios
+      .delete(`${API_BASE_URL}/groups/${groupId}/members`, {
+        data: {
+          email,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        removeGroup(groupId);
+      })
+      .catch((err) => {
+        console.log("leaveGroupError", err.data);
+      });
+    setComponentIsLoading(false);
+  };
+
+  const createGroup = async (groupName, groupDescription) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `${API_BASE_URL}/users/groups`,
+        {
+          name: groupName,
+          description: groupDescription,
         },
         {
           headers: {
@@ -141,7 +204,46 @@ export const AuthProvider = ({ children }) => {
         }
       )
       .then((res) => {
-        setCurrentAccount(userToken);
+        // setCurrentAccount(userToken);
+      })
+      .catch((err) => {
+        console.log("createGroupError");
+        console.log(err.response.data);
+      });
+    setIsLoading(false);
+  };
+
+  const deleteGroup = async (groupId) => {
+    axios
+      .delete(`${API_BASE_URL}/groups/${groupId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        removeGroup(groupId);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
+
+  const updateGroup = async (groupId, groupName, groupDescription) => {
+    axios
+      .patch(
+        `${API_BASE_URL}/groups/${groupId}`,
+        {
+          name: groupName,
+          description: groupDescription,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        replaceGroup(groupId, res.data.data.data);
       })
       .catch((err) => {
         console.log("updateGroupError");
@@ -164,11 +266,9 @@ export const AuthProvider = ({ children }) => {
       let userInfo = await AsyncStorage.getItem("UserInfo");
       userInfo = JSON.parse(userInfo);
 
-      if (userToken) {
+      if (userToken && userInfo) {
         setUserToken(userToken);
-        console.log(userToken);
         setUserInfo(userInfo);
-        setCurrentAccount(userToken);
       }
     } catch (error) {
       console.log(`isLoggedIn error ${error}`);
@@ -187,6 +287,11 @@ export const AuthProvider = ({ children }) => {
         signup,
         logout,
         createGroup,
+        updateGroup,
+        deleteGroup,
+        addMember,
+        deleteMember,
+        leaveGroup,
         getGroups,
         userInfo,
         setCurrentAccount,
@@ -195,6 +300,8 @@ export const AuthProvider = ({ children }) => {
         userToken,
         loginErrorMessage,
         signupErrorMessage,
+        addMemberErrorMessage,
+        setAddMemberErrorMessage,
       }}
     >
       {children}

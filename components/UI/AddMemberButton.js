@@ -36,6 +36,5 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginHorizontal: 10,
-    backgroundColor: "transparent",
   },
 });

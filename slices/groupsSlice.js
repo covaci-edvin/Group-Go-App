@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  groups: [1, 2, 3],
+  groups: [],
 };
 
 export const groupsSlice = createSlice({

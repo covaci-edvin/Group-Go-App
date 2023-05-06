@@ -8,7 +8,7 @@ const StatusLabel = ({ status, color }) => {
     <View
       style={[
         { backgroundColor: color },
-        tw`items-center justify-center rounded-full h-6 w-18`,
+        tw`items-center justify-center rounded-full h-5 w-18`,
       ]}
     >
       <Text

@@ -26,6 +26,7 @@ const DestinationSearch = () => {
             })
           );
         }}
+        // textInputProps={{ placeholderTextColor: Colors.primaryDark }}
         returnKeyType={"search"}
         enablePoweredByContainer={false}
         query={{
@@ -49,9 +50,9 @@ const toInputBoxStyles = StyleSheet.create({
     flex: 0,
   },
   textInput: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: Colors.primaryLight,
     borderRadius: 24,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: Colors.primaryShade,
     fontSize: 16,
     height: 45,

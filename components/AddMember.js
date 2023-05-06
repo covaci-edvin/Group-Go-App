@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import AddMemberButton from "./UI/AddMemberButton";
 import { Colors } from "../styles/colors";
 import tw from "twrnc";
@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { object, string } from "yup";
 import { Formik } from "formik";
+import { AuthContext } from "../context/AuthContext";
 
 let editGroupValidationSchema = object({
   email: string()
@@ -17,7 +18,8 @@ let editGroupValidationSchema = object({
     .required("Please enter a email address"),
 });
 
-const AddMember = () => {
+const AddMember = ({ groupId }) => {
+  const { addMember } = useContext(AuthContext);
   const refInput = useRef();
   const [addMemberEmail, setAddMemberEmail] = useState();
 
@@ -43,7 +45,9 @@ const AddMember = () => {
   return (
     <Formik
       initialValues={{ email: "" }}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => {
+        addMember(groupId, values.email);
+      }}
       validateOnMount={true}
       validationSchema={editGroupValidationSchema}
     >
@@ -60,7 +64,7 @@ const AddMember = () => {
         <View style={tw``}>
           <Animated.View
             style={[
-              tw`rounded-md flex-row items-center`,
+              tw`rounded-md flex-row items-center shadow-xl`,
               styles.addMemberInputContainer,
               reanimatedStyle,
             ]}
@@ -76,31 +80,33 @@ const AddMember = () => {
               onBlur={(value) => {
                 handleBlur("email")(value);
                 animateCloseInput();
+                resetForm();
               }}
               value={values.email}
               placeholder="Enter user email"
             />
           </Animated.View>
-
-          <AddMemberButton
-            onPress={() => {
-              if (!values.email) {
-                animateInput();
-                refInput.current.focus();
-              }
-              if (values.email && isValid) {
-                handleSubmit();
-                setTimeout(() => {
-                  animateCloseInput();
-                  resetForm();
-                }, 1000);
-              }
-            }}
-            isValid={isValid}
-            value={values.email}
-            touched={touched.email}
-            current={addMemberEmail}
-          />
+          <View style={[tw`bg-black pt-2`, styles.buttonContainer]}>
+            <AddMemberButton
+              onPress={() => {
+                if (!values.email) {
+                  animateInput();
+                  refInput.current.focus();
+                }
+                if (values.email && isValid) {
+                  handleSubmit();
+                  setTimeout(() => {
+                    animateCloseInput();
+                    resetForm();
+                  }, 1000);
+                }
+              }}
+              isValid={isValid}
+              value={values.email}
+              touched={touched.email}
+              current={addMemberEmail}
+            />
+          </View>
           {values.email && errors.email && touched.email && (
             <Text style={styles.errors}>{errors.email}</Text>
           )}
@@ -118,6 +124,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryShade,
     marginHorizontal: 10,
     marginBottom: 10,
+    backgroundColor: Colors.primaryLight,
+  },
+  buttonContainer: {
+    backgroundColor: Colors.primaryLight,
+    paddingVertical: 10,
   },
   addMemberInput: {
     height: "100%",

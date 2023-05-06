@@ -16,13 +16,11 @@ import { selectIsGroupSelected } from "../slices/uiToggleSlice";
 import GroupsList from "./GroupsList";
 import { AuthContext } from "../context/AuthContext";
 import { selectGroups } from "../slices/groupsSlice";
+import Button from "./UI/Button";
 
 const Groups = ({ navigation }) => {
-  const { account } = useSelector(selectAccount);
-  const { groups } = useSelector(selectGroups);
   const isGroupSelected = useSelector(selectIsGroupSelected);
-  const { getGroups, componentIsLoading, userInfo } = useContext(AuthContext);
-  // console.log(data);
+  const { componentIsLoading, userInfo } = useContext(AuthContext);
 
   return (
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
@@ -43,29 +41,13 @@ const Groups = ({ navigation }) => {
       {componentIsLoading ? (
         <Text>is loading</Text>
       ) : (
-        <GroupsList
-          // data={account.groups}
-          accountId={userInfo.user.id}
-          navigation={navigation}
-        />
+        <GroupsList accountId={userInfo.user.id} navigation={navigation} />
       )}
 
-      <View style={[tw`items-center`, styles.footerContainer]}>
-        <TouchableOpacity
-          style={[
-            tw`flex-row items-center justify-center w-1/2 gap-1 rounded-full h-12`,
-            styles.button,
-          ]}
-          onPress={() => navigation.navigate("CreateGroupScreen")}
-        >
-          <Text style={[styles.text]}>New group</Text>
-          <AntDesign
-            name={!isGroupSelected ? "addusergroup" : "adduser"}
-            size={30}
-            color={Colors.primaryDark}
-          />
-        </TouchableOpacity>
-      </View>
+      <Button
+        onPress={() => navigation.navigate("CreateGroupScreen")}
+        text={"New group"}
+      />
     </SafeAreaView>
   );
 };
@@ -80,22 +62,9 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingVertical: 3,
   },
-  footerContainer: {
-    backgroundColor: Colors.primaryLight,
-  },
+
   textHeader: {
     color: Colors.primaryDarkLighter,
     fontWeight: 600,
-  },
-  text: {
-    fontSize: 16,
-    color: Colors.primaryDark,
-    fontWeight: 600,
-  },
-  button: {
-    borderColor: Colors.primaryDark,
-    borderWidth: 1,
-    marginVertical: 20,
-    paddingVertical: 3,
   },
 });

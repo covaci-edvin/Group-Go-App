@@ -1,16 +1,20 @@
-import { StyleSheet, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import tw from "twrnc";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../../styles/colors";
 
 const Input = (props) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  const refInput = props.refInput ? props.refInput : useRef();
+
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() => refInput.current.focus()}
       style={[
-        tw`flex-row items-start justify-between p-3 `,
+        tw`flex-row items-start justify-between p-3 rounded-md`,
         styles.inputContainer,
         { height: props.height ? props.height : 50 },
         isFocused ? styles.inputFocus : styles.inputBlur,
@@ -32,6 +36,7 @@ const Input = (props) => {
           />
         )}
         <TextInput
+          ref={refInput}
           placeholder={props.placeholder}
           onFocus={() => setIsFocused(true)}
           onBlur={() => {
@@ -39,14 +44,14 @@ const Input = (props) => {
             props.onBlur;
           }}
           onChangeText={props.onChangeText}
-          style={[tw``, styles.input]}
+          style={[styles.input]}
           value={props.value}
           multiline={props.multiline}
           autoFocus={props.autoFocus}
           defaultValue={props.defaultValue}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 15,
     marginBottom: 5,
-    borderRadius: 24,
+    // borderRadius: 10,
     color: Colors.primaryDark,
   },
   input: {

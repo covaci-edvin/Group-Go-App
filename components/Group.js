@@ -27,7 +27,7 @@ const Group = ({ name, members, adminId, accountId, group, navigation }) => {
   }, []);
 
   useEffect(() => {
-    opacity.value = withSpring(1, { damping: 30 });
+    opacity.value = withTiming(1, { duration: 500 });
   }, []);
 
   return (

@@ -64,36 +64,17 @@ const BottomControls = ({ navigation }) => {
         colors={[Colors.gradientBlueLight, Colors.gradientBlue]}
         style={[tw`flex-1 rounded-t-3xl`]}
       >
-        {/* <View style={tw`mx-10 flex-1 flex-row items-center justify-between`}>
-        <TouchableOpacity style={tw`w-15 h-15 justify-center items-center`}>
-          <Feather name="info" size={35} color={Colors.primary} />
-        </TouchableOpacity>
-        <TouchableOpacity style={tw`w-15 h-15 justify-center items-center`}>
-          <Feather name="message-circle" size={35} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
-        style={[
-          tw`bg-slate-50 shadow-lg h-24 w-24 rounded-full flex items-center justify-center absolute left-1/2`,
-          { transform: [{ translateX: -48 }, { translateY: -48 }] },
-        ]}
-      >
-        <AntDesign
-          name={!isGroupSelected ? "addusergroup" : "adduser"}
-          size={50}
-          color={Colors.primary}
-        />
-      </TouchableOpacity> */}
-
         <SafeAreaView
           style={tw`mx-10 flex-1 flex-row items-center justify-between`}
         >
           <TouchableOpacity style={tw`w-15 h-15 justify-center items-center`}>
-            <Feather name="info" size={30} color={"#f8fafc"} />
+            <Feather name="info" size={30} color={Colors.primaryLight} />
           </TouchableOpacity>
           <TouchableOpacity
             style={[
-              tw`bg-slate-50 shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
+              tw`shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
+              ,
+              { backgroundColor: Colors.primaryLight },
             ]}
             activeOpacity={0.6}
             onPress={() => navigation.navigate("Groups")}
@@ -105,7 +86,11 @@ const BottomControls = ({ navigation }) => {
             />
           </TouchableOpacity>
           <TouchableOpacity style={tw`w-15 h-15 justify-center items-center`}>
-            <Feather name="message-circle" size={30} color={"#f8fafc"} />
+            <Feather
+              name="message-circle"
+              size={30}
+              color={Colors.primaryLight}
+            />
           </TouchableOpacity>
         </SafeAreaView>
       </LinearGradient>

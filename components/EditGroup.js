@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import { object, string } from "yup";
+import { object, ref, string } from "yup";
 import { Formik } from "formik";
 import Input from "./UI/Input";
 import { Colors } from "../styles/colors";
 import tw from "twrnc";
+import { AuthContext } from "../context/AuthContext";
 
 let editGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),
@@ -19,7 +20,14 @@ let editGroupValidationSchema = object({
 const EditGroup = ({ group }) => {
   const [groupName, setGroupName] = useState(group.name);
   const [groupDescription, setGroupDescription] = useState(group.description);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const { updateGroup } = useContext(AuthContext);
+  const refNameInput = useRef();
+  const refDescriptionInput = useRef();
 
+  const blurInput = (refInput) => {
+    refInput.current.blur();
+  };
   const height = useSharedValue(16);
 
   const reanimatedStyle = useAnimatedStyle(() => {
@@ -43,16 +51,22 @@ const EditGroup = ({ group }) => {
       initialValues.groupName !== groupName ||
       initialValues.groupDescription !== groupDescription
     ) {
+      setIsDisabled(false);
       height.value = withSpring(40, { damping: 30 });
     } else {
+      setIsDisabled(true);
       height.value = withSpring(16, { damping: 30 });
     }
-  }, [groupName, groupDescription]);
+  }, [groupName, groupDescription, group]);
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => {
+        updateGroup(group.id, values.groupName, values.groupDescription);
+        blurInput(refNameInput);
+        blurInput(refDescriptionInput);
+      }}
       validateOnMount={true}
       validationSchema={editGroupValidationSchema}
     >
@@ -69,6 +83,7 @@ const EditGroup = ({ group }) => {
         <View>
           <View style={styles.group}>
             <Input
+              refInput={refNameInput}
               type="name"
               onChangeText={(value) => {
                 handleChange("groupName")(value);
@@ -82,6 +97,7 @@ const EditGroup = ({ group }) => {
               <Text style={styles.errors}>{errors.groupName}</Text>
             )}
             <Input
+              refInput={refDescriptionInput}
               onChangeText={(value) => {
                 handleChange("groupDescription")(value);
                 setGroupDescription(value);
@@ -118,6 +134,7 @@ const EditGroup = ({ group }) => {
               style={[tw`items-center`]}
               activeOpacity={0.7}
               onPress={handleSubmit}
+              disabled={isDisabled}
             >
               <Animated.View
                 style={[

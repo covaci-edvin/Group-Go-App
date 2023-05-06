@@ -17,6 +17,7 @@ import safeViewAndroid from "../utils/safeViewAndroid";
 import tw from "twrnc";
 import Input from "./UI/Input";
 import { AuthContext } from "../context/AuthContext";
+import Button from "./UI/Button";
 
 let createGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),
@@ -76,22 +77,7 @@ const Groups = ({ navigation }) => {
               height={220}
               multiline={true}
             />
-            <View style={[tw`items-center`, styles.footerContainer]}>
-              <TouchableOpacity
-                style={[
-                  tw`flex-row items-center justify-center w-1/2 gap-1 rounded-full h-12`,
-                  styles.button,
-                ]}
-                onPress={handleSubmit}
-              >
-                <Text style={[styles.text]}>Create group</Text>
-                <AntDesign
-                  name={"addusergroup"}
-                  size={30}
-                  color={Colors.primaryDark}
-                />
-              </TouchableOpacity>
-            </View>
+            <Button onPress={handleSubmit} text={"Create group"} />
           </ScrollView>
         )}
       </Formik>

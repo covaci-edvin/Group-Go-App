@@ -1,37 +1,55 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Colors } from "../styles/colors";
 import tw from "twrnc";
 import Member from "./Member";
+import { useSelector } from "react-redux";
+import { selectGroups } from "../slices/groupsSlice";
+import { selectEditGroup } from "../slices/editGroupSlice";
+import { AuthContext } from "../context/AuthContext";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
-const Members = ({ group, toggleModal, setDeleteMemberName }) => {
+const Members = ({ toggleModal, setDeleteMember, accountUserId }) => {
+  const { group } = useSelector(selectEditGroup);
+  const { componentIsLoading } = useContext(AuthContext);
+
   const renderItem = useCallback(
     ({ item }) => (
       <Member
+        groupId={group.id}
         item={item}
         adminId={group.admin.id}
         toggleModal={toggleModal}
-        setDeleteMemberName={setDeleteMemberName}
+        setDeleteMember={setDeleteMember}
+        accountUserId={accountUserId}
       />
     ),
-    []
+    [group]
   );
 
-  const keyExtractor = useCallback((item) => item.id.toString(), []);
+  const keyExtractor = useCallback((item) => item.id.toString(), [group]);
   return (
-    <View style={tw`shrink`}>
+    <View style={[tw`shrink`]}>
       <View style={tw`flex-row justify-end`}>
         <Text style={[tw`text-sm`, styles.membersCount]}>
           {group.members.length}{" "}
           {group.members.length === 1 ? "member" : "members"}
         </Text>
       </View>
-      <FlatList
-        style={[tw`grow-0`, styles.flatlist]}
-        data={group.members}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-      />
+      <Animated.View>
+        <FlatList
+          style={[tw`grow-0`, styles.flatlist]}
+          data={group.members}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+        />
+      </Animated.View>
+      {componentIsLoading && <Text>loading</Text>}
     </View>
   );
 };

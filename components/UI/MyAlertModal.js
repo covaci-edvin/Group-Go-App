@@ -1,17 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-native-modal";
 import { Colors } from "../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import tw from "twrnc";
 
-const MyModal = ({ message, isVisible, toggleModal, title, name }) => {
+const MyAlertModal = ({
+  message,
+  isVisible,
+  toggleModal,
+  title,
+  name,
+  onConfirmHandler,
+  cancelButtonMessage,
+  confirmButtonMessage,
+}) => {
   return (
     <Modal
       isVisible={isVisible}
       backdropColor={Colors.primaryDark}
       onBackButtonPress={toggleModal}
       onBackdropPress={toggleModal}
+      animationIn={"fadeIn"}
+      animationOut={"fadeOut"}
     >
       <View
         style={[tw`rounded-md shadow-lg w-70 self-center `, styles.container]}
@@ -50,13 +61,14 @@ const MyModal = ({ message, isVisible, toggleModal, title, name }) => {
             ]}
           >
             <Text style={[tw`text-base`, styles.cancelConfirmText]}>
-              No, Keep!
+              {cancelButtonMessage ? cancelButtonMessage : "No, Keep!"}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
               toggleModal();
+              onConfirmHandler();
             }}
             activeOpacity={0.8}
             style={[
@@ -66,7 +78,7 @@ const MyModal = ({ message, isVisible, toggleModal, title, name }) => {
             ]}
           >
             <Text style={[tw`text-base`, styles.deleteConfirmText]}>
-              Yes, Delete!
+              {confirmButtonMessage ? confirmButtonMessage : "Yes, Delete!"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -75,12 +87,15 @@ const MyModal = ({ message, isVisible, toggleModal, title, name }) => {
   );
 };
 
-export default MyModal;
+export default MyAlertModal;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.primaryLight,
     padding: 10,
+  },
+  warningIcon: {
+    backgroundColor: Colors.redLight,
   },
   button: {
     // borderWidth: 1,
@@ -98,9 +113,6 @@ const styles = StyleSheet.create({
   cancelConfirmText: {
     color: Colors.primaryDarkLighter,
     fontWeight: 600,
-  },
-  warningIcon: {
-    backgroundColor: Colors.redLight,
   },
   title: {
     color: Colors.primaryDark,

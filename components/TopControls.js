@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../styles/colors";
 import safeViewAndroid from "../utils/safeViewAndroid";
 
-const gradientColors = ["#f8fafc", "#f1f5f9"];
+const gradientColors = [Colors.primaryLight, Colors.primaryLight];
 
 const TopControls = ({ navigation }) => {
   return (
@@ -27,8 +27,9 @@ const TopControls = ({ navigation }) => {
         activeOpacity={0.6}
         onPress={() => navigation.openDrawer()}
         style={[
-          tw`w-13 h-13 items-center justify-center rounded-3xl bg-red-300`,
+          tw`w-13 h-13 items-center justify-center rounded-3xl`,
           styles.shadow,
+          styles.accountButton,
         ]}
       >
         <AntDesign name="user" size={30} color={Colors.primaryDark} />
@@ -44,11 +45,7 @@ const TopControls = ({ navigation }) => {
           style={[tw`flex-1 items-center justify-center rounded-3xl`]}
         >
           <Text
-            style={
-              (tw`text-slate-50`,
-              { color: `${Colors.primary}` },
-              styles.selectGroup)
-            }
+            style={(tw``, { color: `${Colors.primary}` }, styles.selectGroup)}
           >
             select a group...
           </Text>
@@ -72,5 +69,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 7,
     elevation: 5,
+  },
+  accountButton: {
+    backgroundColor: Colors.secondaryLight,
   },
 });

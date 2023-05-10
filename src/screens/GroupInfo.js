@@ -10,9 +10,10 @@ import MyAlertModal from "../components/UI/MyAlertModal";
 import EditGroup from "../components/Group/EditGroup";
 import Members from "../components/Group/Members";
 import AddMember from "../components/Group/AddMember";
-import { AuthContext } from "../context/AuthContext";
+
 import MyResponseModal from "../components/UI/MyResponseModal";
 import GroupHeaderInfo from "../components/Group/GroupHeaderInfo";
+import { AuthContext } from "../context/AuthContext";
 
 const GroupInfo = ({ navigation }) => {
   const { group } = useSelector(selectEditGroup);
@@ -171,7 +172,7 @@ export default GroupInfo;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     flex: 1,
   },
   textHeader: {

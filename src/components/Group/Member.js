@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryShade,
   },
   name: {
-    color: Colors.primaryDark,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 500,
   },
   email: {

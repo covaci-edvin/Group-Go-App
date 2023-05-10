@@ -25,11 +25,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryShade,
   },
   name: {
-    color: Colors.primaryDark,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 700,
   },
   description: {
-    color: Colors.primaryDarkLighter,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 500,
   },
 });

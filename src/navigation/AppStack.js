@@ -7,6 +7,7 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../styles/colors";
 import GroupsStack from "./GroupsStack";
 import { AuthContext } from "../context/AuthContext";
+import { color } from "react-native-reanimated";
 
 const Drawer = createDrawerNavigator();
 
@@ -22,11 +23,15 @@ const AppStack = (props) => {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: Colors.primaryLight,
+          backgroundColor: Colors.primaryDark,
         },
-        drawerLabelStyle: { marginLeft: -20, fontSize: 16 },
+        drawerLabelStyle: {
+          marginLeft: -20,
+          fontSize: 16,
+          color: Colors.primaryLight,
+        },
         drawerActiveBackgroundColor: Colors.primaryShade,
-        drawerActiveTintColor: Colors.primaryLight,
+        drawerActiveTintColor: Colors.primaryDark,
       }}
       useLegacyImplementation
       initialRouteName="Map"
@@ -37,7 +42,11 @@ const AppStack = (props) => {
         navigation={props.navigation}
         options={{
           drawerIcon: ({ color }) => (
-            <Ionicons name="map-outline" size={25} color={color} />
+            <Ionicons
+              name="map-outline"
+              size={25}
+              color={Colors.primaryLight}
+            />
           ),
         }}
       />
@@ -46,7 +55,7 @@ const AppStack = (props) => {
         component={GroupsStack}
         options={{
           drawerIcon: ({ color }) => (
-            <Feather name="users" size={25} color={color} />
+            <Feather name="users" size={25} color={Colors.primaryLight} />
           ),
         }}
       />

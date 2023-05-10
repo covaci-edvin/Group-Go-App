@@ -12,16 +12,22 @@ import Animated, {
 } from "react-native-reanimated";
 import DestinationSearch from "./DestinationSearch";
 import { Colors } from "../../styles/colors";
+import { useSelector } from "react-redux";
+import { selectDestination } from "../../slices/navigationSlice";
+import DestinationInfo from "./DestinationInfo";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const BottomSheet = () => {
+  const destination = useSelector(selectDestination);
+
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
   const insets = useSafeAreaInsets();
 
   const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 80;
-  const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 5 - insets.bottom;
+  const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 5.2 - insets.bottom;
+  const MID_TRANSLATE_Y = -SCREEN_HEIGHT / 3.5;
   const scrollTo = useCallback((destination, damping) => {
     "worklet";
     translateY.value = withSpring(destination, { damping: damping });
@@ -49,13 +55,18 @@ const BottomSheet = () => {
   }, []);
 
   useEffect(() => {
+    destination.coordinates.latitude
+      ? scrollTo(MID_TRANSLATE_Y, 50)
+      : scrollTo(MIN_TRANSLATE_Y, 50);
     Keyboard.addListener("keyboardDidShow", () => {
       scrollTo(MAX_TRANSLATE_Y, 50);
     });
     Keyboard.addListener("keyboardDidHide", () => {
-      scrollTo(MIN_TRANSLATE_Y, 50);
+      destination.coordinates.latitude
+        ? scrollTo(MID_TRANSLATE_Y, 50)
+        : scrollTo(MIN_TRANSLATE_Y, 50);
     });
-  }, []);
+  }, [destination]);
 
   const rBottomSheetStyle = useAnimatedStyle(() => {
     return {
@@ -64,7 +75,9 @@ const BottomSheet = () => {
   });
 
   return (
-    <GestureDetector gesture={gesture}>
+    <GestureDetector
+      gesture={destination.coordinates.latitude ? Gesture.Tap() : gesture}
+    >
       <Animated.View
         style={[
           styles.bottomSheetContainer,
@@ -77,8 +90,14 @@ const BottomSheet = () => {
             intensity={100}
             style={[tw`flex-1`, styles.blur, styles.shadow]}
           >
-            <View style={[styles.line]} />
-            <DestinationSearch />
+            {!destination.coordinates.latitude && (
+              <View style={[styles.line]} />
+            )}
+            {destination.coordinates.latitude ? (
+              <DestinationInfo />
+            ) : (
+              <DestinationSearch />
+            )}
           </BlurView>
         </View>
       </Animated.View>
@@ -95,8 +114,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     position: "absolute",
     top: SCREEN_HEIGHT,
-    backgroundColor:
-      Platform.OS === "ios" ? "transparent" : Colors.primaryLight,
+    backgroundColor: Platform.OS === "ios" ? "transparent" : Colors.primaryDark,
   },
   line: {
     width: 50,
@@ -105,7 +123,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 10,
     backgroundColor:
-      Platform.OS === "ios" ? Colors.primaryLight : Colors.primaryTint,
+      Platform.OS === "ios"
+        ? Colors.primaryDarkEvenLighter
+        : Colors.primaryDarkEvenLighter,
   },
   blur: {
     borderRadius: 10,

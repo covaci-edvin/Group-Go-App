@@ -14,8 +14,9 @@ import { AntDesign } from "@expo/vector-icons";
 import safeViewAndroid from "../utils/safeViewAndroid";
 import tw from "twrnc";
 import Input from "../components/UI/Input";
-import { AuthContext } from "../context/AuthContext";
 import Button from "../components/UI/Button";
+
+import { AuthContext } from "../context/AuthContext";
 
 let createGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),
@@ -32,7 +33,7 @@ const Groups = ({ navigation }) => {
   return (
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
       <View style={tw`flex-row items-center justify-between mx-6`}>
-        <Text style={[tw`text-xl`, styles.textHeader]}>Create Group</Text>
+        <Text style={[tw`text-lg`, styles.textHeader]}>Create Group</Text>
         <TouchableOpacity
           style={tw`h-10 w-10 items-end justify-center`}
           onPress={() => navigation.goBack()}
@@ -53,6 +54,7 @@ const Groups = ({ navigation }) => {
           values,
           touched,
           errors,
+          isValid,
         }) => (
           <ScrollView style={tw`px-3`}>
             <Input
@@ -75,7 +77,11 @@ const Groups = ({ navigation }) => {
               height={220}
               multiline={true}
             />
-            <Button onPress={handleSubmit} text={"Create group"} />
+            <Button
+              onPress={handleSubmit}
+              text={"Create group"}
+              isValid={isValid}
+            />
           </ScrollView>
         )}
       </Formik>
@@ -87,7 +93,7 @@ export default Groups;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     flex: 1,
   },
   textHeader: {

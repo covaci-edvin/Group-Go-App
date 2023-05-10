@@ -25,14 +25,18 @@ const Input = (props) => {
           <MaterialIcons
             name="group"
             size={25}
-            color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+            color={
+              isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive
+            }
           />
         )}
         {props.type === "description" && (
           <MaterialIcons
             name="description"
             size={25}
-            color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+            color={
+              isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive
+            }
           />
         )}
         <TextInput
@@ -49,6 +53,7 @@ const Input = (props) => {
           multiline={props.multiline}
           autoFocus={props.autoFocus}
           defaultValue={props.defaultValue}
+          placeholderTextColor={Colors.primaryDarkLighter}
         />
       </View>
     </TouchableOpacity>
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: Colors.primaryDark,
+    color: Colors.primaryLight,
     paddingTop: 0,
   },
   inputFocus: {
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   inputBlur: {
-    borderColor: Colors.primaryTint,
+    borderColor: Colors.primaryShadeNotActive,
     borderWidth: 1,
   },
 });

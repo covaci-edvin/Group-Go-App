@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonCancel: {
-    backgroundColor: Colors.primaryTintLighter,
+    backgroundColor: Colors.primaryDarkLighter,
   },
   buttonSave: {
     backgroundColor: Colors.primaryShade,
@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: Colors.primaryDarkLighter,
+    color: Colors.primaryDark,
     fontWeight: 600,
   },
   textSave: {
     fontSize: 16,
-    color: Colors.primaryLight,
+    color: Colors.primaryDark,
     fontWeight: 600,
   },
   errors: {

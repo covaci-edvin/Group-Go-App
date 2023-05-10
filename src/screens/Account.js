@@ -20,13 +20,17 @@ const Account = (props) => {
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
       <View style={tw`flex-1`}>
         <View style={[tw`h-23 justify-end gap-1`, styles.account]}>
-          <Text numberOfLines={1} style={[tw`text-3xl`, styles.name]}>
+          <Text numberOfLines={1} style={[tw`text-2xl`, styles.name]}>
             {userInfo.user.name}
           </Text>
           <Text style={[styles.email]}>{userInfo.user.email}</Text>
 
           <TouchableOpacity style={[tw`absolute top-2 right-2`, styles.edit]}>
-            <Feather name="edit" size={20} color={Colors.primaryDark} />
+            <Feather
+              name="edit"
+              size={20}
+              color={Colors.primaryDarkEvenLighter}
+            />
           </TouchableOpacity>
         </View>
         <DrawerItemList {...props} />
@@ -60,14 +64,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 8,
     marginBottom: 20,
-    backgroundColor: Colors.primaryLight,
   },
   name: {
-    color: Colors.primaryDark,
-    fontWeight: 600,
+    color: Colors.primaryLight,
+    fontWeight: 500,
   },
   email: {
-    color: Colors.primaryDark,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 500,
   },
   edit: {

@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setAccount } from "../slices/accountSlice";
 import { API_BASE_URL } from "@env";
 import { selectGroups, setGroups } from "../slices/groupsSlice";
 import { setEditGroup } from "../slices/editGroupSlice";
@@ -10,13 +9,14 @@ import { setEditGroup } from "../slices/editGroupSlice";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [componentIsLoading, setComponentIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [componentIsLoading, setComponentIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const [signupErrorMessage, setSignupErrorMessage] = useState("");
   const [addMemberErrorMessage, setAddMemberErrorMessage] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
   const dispatch = useDispatch();
   const { groups } = useSelector(selectGroups);
 
@@ -39,42 +39,6 @@ export const AuthProvider = ({ children }) => {
     dispatch(setGroups(updatedGroups));
   };
 
-  const setCurrentAccount = async (userToken) => {
-    setIsLoading(true);
-    await axios
-      .get(`${API_BASE_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      })
-      .then((res) => {
-        dispatch(setAccount(res.data.data.data));
-      })
-      .catch((err) => {
-        console.log("setCurrentAccountError");
-        console.log(err.response.data.message);
-      });
-    setIsLoading(false);
-  };
-
-  const getGroups = async () => {
-    setComponentIsLoading(true);
-    await axios
-      .get(`${API_BASE_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      })
-      .then((res) => {
-        dispatch(setGroups(res.data.data.data.groups));
-      })
-      .catch((err) => {
-        console.log("getGroupsError");
-        console.log(err);
-      });
-    setComponentIsLoading(false);
-  };
-
   const login = async (email, password) => {
     setIsLoading(true);
     axios
@@ -87,7 +51,6 @@ export const AuthProvider = ({ children }) => {
         token = userInfo.token;
         setUserInfo(userInfo.data);
         setUserToken(userInfo.token);
-        setCurrentAccount(userInfo?.token);
         AsyncStorage.setItem("UserToken", userInfo.token);
         AsyncStorage.setItem("UserInfo", JSON.stringify(userInfo.data));
       })
@@ -111,7 +74,6 @@ export const AuthProvider = ({ children }) => {
         let userInfo = res.data;
         setUserInfo(userInfo.data);
         setUserToken(userInfo.token);
-        setCurrentAccount(userInfo.token);
         AsyncStorage.setItem("UserToken", userInfo.token);
         AsyncStorage.setItem("UserInfo", JSON.stringify(userInfo.data));
       })
@@ -141,6 +103,7 @@ export const AuthProvider = ({ children }) => {
         replaceGroup(groupId, res.data.data.group);
       })
       .catch((err) => {
+        console.log("addMemberError");
         setAddMemberErrorMessage(err.response.data.message);
       });
     setComponentIsLoading(false);
@@ -167,6 +130,24 @@ export const AuthProvider = ({ children }) => {
     setComponentIsLoading(false);
   };
 
+  const getGroups = async () => {
+    setComponentIsLoading(true);
+    axios
+      .get(`${API_BASE_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        dispatch(setGroups(res.data.data.data.groups));
+      })
+      .catch((err) => {
+        console.log("getGroupsError");
+        console.log(err);
+      });
+    setComponentIsLoading(false);
+  };
+
   const leaveGroup = async (groupId, email) => {
     setComponentIsLoading(true);
     axios
@@ -183,7 +164,7 @@ export const AuthProvider = ({ children }) => {
         removeGroup(groupId);
       })
       .catch((err) => {
-        console.log("leaveGroupError", err.data);
+        console.log("leaveGroupError", err.message);
       });
     setComponentIsLoading(false);
   };
@@ -203,12 +184,10 @@ export const AuthProvider = ({ children }) => {
           },
         }
       )
-      .then((res) => {
-        // setCurrentAccount(userToken);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log("createGroupError");
-        console.log(err.response.data);
+        console.log(err.response);
       });
     setIsLoading(false);
   };
@@ -294,7 +273,6 @@ export const AuthProvider = ({ children }) => {
         leaveGroup,
         getGroups,
         userInfo,
-        setCurrentAccount,
         isLoading,
         componentIsLoading,
         userToken,

@@ -84,6 +84,7 @@ const AddMember = ({ groupId }) => {
               }}
               value={values.email}
               placeholder="Enter user email"
+              placeholderTextColor={Colors.primaryDarkLighter}
             />
           </Animated.View>
           <View style={[tw`bg-black pt-2`, styles.buttonContainer]}>
@@ -124,16 +125,17 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryShade,
     marginHorizontal: 10,
     marginBottom: 10,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
   },
   buttonContainer: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     paddingVertical: 10,
   },
   addMemberInput: {
     height: "100%",
     padding: 11,
     fontSize: 17,
+    color: Colors.primaryLight,
   },
   errors: {
     fontSize: 14,

@@ -39,7 +39,7 @@ const Login = ({ navigation }) => {
     signup(data.name, data.email, data.password, data.passwordConfirmation);
   };
   return (
-    <ScrollView style={{ backgroundColor: Colors.primaryLight }}>
+    <ScrollView style={{ backgroundColor: Colors.primaryDark }}>
       <Formik
         initialValues={{
           name: "",
@@ -144,7 +144,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   formContainer: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
   },
   signUpLink: {
     color: Colors.primaryShade,

@@ -1,16 +1,34 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import tw from "twrnc";
 import { useDispatch } from "react-redux";
 import { setDestination } from "../../slices/navigationSlice";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import { Colors } from "../../styles/colors";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const DestinationSearch = () => {
   const dispatch = useDispatch();
+
+  const opacity = useSharedValue(0);
+
+  const reanimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, []);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: 300 });
+  }, []);
+
   return (
-    <View>
+    <Animated.View style={reanimatedStyle}>
       <GooglePlacesAutocomplete
         styles={toInputBoxStyles}
         fetchDetails={true}
@@ -26,7 +44,10 @@ const DestinationSearch = () => {
             })
           );
         }}
-        // textInputProps={{ placeholderTextColor: Colors.primaryDark }}
+        textInputProps={{
+          placeholderTextColor: Colors.primaryDarkEvenLighter,
+          color: Colors.primaryLight,
+        }}
         returnKeyType={"search"}
         enablePoweredByContainer={false}
         query={{
@@ -37,7 +58,7 @@ const DestinationSearch = () => {
         nearbyPlacesAPI="GooglePlacesSearch"
         debounce={400}
       />
-    </View>
+    </Animated.View>
   );
 };
 
@@ -46,16 +67,20 @@ export default DestinationSearch;
 const toInputBoxStyles = StyleSheet.create({
   container: {
     backgroundColor: "transparent",
-    paddingTop: 5,
+    paddingTop: 3,
     flex: 0,
   },
   textInput: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: "transparent",
     borderRadius: 24,
-    // borderWidth: 1,
-    borderColor: Colors.primaryShade,
+    borderWidth: Platform.OS === "ios" ? 0 : 0,
+    borderBottomWidth: Platform.OS === "ios" ? 0 : 2,
+    borderTopWidth: Platform.OS === "ios" ? 0 : 0,
+    borderLeftWidth: Platform.OS === "ios" ? 1 : 0,
+    borderRightWidth: Platform.OS === "ios" ? 1 : 0,
+    borderColor: Colors.primaryDarkEvenLighter,
     fontSize: 16,
-    height: 45,
+    height: 40,
     paddingHorizontal: 20,
   },
 
@@ -64,18 +89,19 @@ const toInputBoxStyles = StyleSheet.create({
     paddingBottom: 0,
   },
   listView: {
-    marginTop: 20,
+    // marginTop: 10,
     marginHorizontal: 20,
     borderRadius: 20,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: "transparent",
     height: "100%",
   },
   description: {
     fontSize: 16,
+    color: Colors.primaryLight,
   },
   row: {
     backgroundColor: "transparent",
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   separator: {
     backgroundColor: "#BDCDCD",

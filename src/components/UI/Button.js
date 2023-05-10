@@ -4,7 +4,7 @@ import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 import { AntDesign } from "@expo/vector-icons";
 
-const Button = ({ onPress, text }) => {
+const Button = ({ onPress, text, isValid }) => {
   return (
     <View style={[tw`items-center`, styles.footerContainer]}>
       <TouchableOpacity
@@ -15,11 +15,7 @@ const Button = ({ onPress, text }) => {
         onPress={onPress}
       >
         <Text style={[styles.text]}>{text}</Text>
-        <AntDesign
-          name={"addusergroup"}
-          size={30}
-          color={Colors.primaryLight}
-        />
+        <AntDesign name={"addusergroup"} size={30} color={Colors.primaryDark} />
       </TouchableOpacity>
     </View>
   );
@@ -29,11 +25,11 @@ export default Button;
 
 const styles = StyleSheet.create({
   footerContainer: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
   },
   text: {
     fontSize: 16,
-    color: Colors.primaryLight,
+    color: Colors.primaryDark,
     fontWeight: 600,
   },
   button: {

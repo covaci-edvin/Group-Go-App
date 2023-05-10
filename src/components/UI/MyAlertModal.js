@@ -44,7 +44,7 @@ const MyAlertModal = ({
         <Text
           style={[
             tw`mb-3 text-center text-sm font-bold`,
-            { color: Colors.primaryDark },
+            { color: Colors.primaryLight },
           ]}
         >
           {name}
@@ -91,11 +91,11 @@ export default MyAlertModal;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     padding: 10,
   },
   warningIcon: {
-    backgroundColor: Colors.redLight,
+    backgroundColor: Colors.redDark,
   },
   button: {
     // borderWidth: 1,
@@ -108,18 +108,18 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   cancelConfirm: {
-    backgroundColor: Colors.primaryTintLighter,
+    backgroundColor: Colors.primaryDarkLighter,
   },
   cancelConfirmText: {
-    color: Colors.primaryDarkLighter,
+    color: Colors.primaryLight,
     fontWeight: 600,
   },
   title: {
-    color: Colors.primaryDark,
+    color: Colors.primaryLight,
     fontWeight: 700,
   },
   message: {
-    color: Colors.primaryDarkLighter,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 600,
   },
 });

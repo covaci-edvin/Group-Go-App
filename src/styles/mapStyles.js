@@ -1,43 +1,113 @@
 export const MapStyles = [
   {
-    featureType: "landscape.natural.landcover",
-    elementType: "geometry.fill",
-    stylers: [
-      {
-        color: "#c0e1db",
-      },
-    ],
-  },
-  {
-    featureType: "poi",
     elementType: "labels.icon",
-    stylers: [
-      {
-        color: "#81abb6",
-      },
-      {
-        visibility: "simplified",
-      },
-    ],
-  },
-  {
-    featureType: "poi",
-    elementType: "labels.text.fill",
-    stylers: [
-      {
-        color: "#5b6867",
-      },
-    ],
-  },
-  {
-    featureType: "poi",
-    elementType: "labels.text.stroke",
     stylers: [
       {
         visibility: "off",
       },
+    ],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [
       {
-        weight: 1.5,
+        color: "#ebebeb",
+      },
+    ],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#000000",
+      },
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#ffaa00",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.man_made",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.man_made",
+    elementType: "labels",
+    stylers: [
+      {
+        visibility: "shown",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.natural",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#394142",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.natural.landcover",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#394142",
+      },
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.natural.terrain",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#394142",
+      },
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#394142",
+      },
+    ],
+  },
+  {
+    featureType: "poi.medical",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "poi.medical",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#394142",
       },
     ],
   },
@@ -46,7 +116,19 @@ export const MapStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#c0e1db",
+        color: "#232323",
+      },
+      {
+        visibility: "simplified",
+      },
+    ],
+  },
+  {
+    featureType: "poi.sports_complex",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#606060",
       },
     ],
   },
@@ -55,7 +137,7 @@ export const MapStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#efefef",
+        color: "#7a7a7a",
       },
     ],
   },
@@ -64,10 +146,7 @@ export const MapStyles = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: "#74c8c9",
-      },
-      {
-        weight: 1.5,
+        color: "#aaaaaa",
       },
     ],
   },
@@ -76,7 +155,7 @@ export const MapStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#efefef",
+        color: "#7a7a7a",
       },
     ],
   },
@@ -85,10 +164,7 @@ export const MapStyles = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: "#74c8c9",
-      },
-      {
-        weight: 1.5,
+        color: "#929292",
       },
     ],
   },
@@ -97,7 +173,7 @@ export const MapStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#efefef",
+        color: "#606060",
       },
     ],
   },
@@ -106,10 +182,73 @@ export const MapStyles = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: "#74c8c9",
+        color: "#d6d6d6",
       },
       {
-        weight: 0.5,
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "transit",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#929292",
+      },
+    ],
+  },
+  {
+    featureType: "transit",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#d6d6d6",
+      },
+    ],
+  },
+  {
+    featureType: "transit.line",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#929292",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#597297",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "labels",
+    stylers: [
+      {
+        color: "#394142",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#394142",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        visibility: "off",
       },
     ],
   },

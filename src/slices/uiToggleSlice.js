@@ -8,8 +8,8 @@ export const uiToggleSlice = createSlice({
   name: "uiToggle",
   initialState,
   reducers: {
-    toggleIsGroupSelected: (state) => {
-      state.isGroupSelected = !state.isGroupSelected;
+    toggleIsGroupSelected: (state, actions) => {
+      state.isGroupSelected = actions.payload;
     },
   },
 });

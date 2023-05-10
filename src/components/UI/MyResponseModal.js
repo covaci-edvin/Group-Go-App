@@ -73,18 +73,18 @@ export default MyResponseModal;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     padding: 10,
   },
   warningIcon: {
-    backgroundColor: Colors.primaryTintLighter,
+    backgroundColor: Colors.primaryTint,
   },
   title: {
-    color: Colors.primaryDark,
+    color: Colors.primaryLight,
     fontWeight: 700,
   },
   message: {
-    color: Colors.primaryDarkLighter,
+    color: Colors.primaryDarkEvenLighter,
     fontWeight: 600,
   },
   cancelConfirm: {

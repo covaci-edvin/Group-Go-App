@@ -21,7 +21,7 @@ let loginValidationSchema = object({
 
 const Login = ({ navigation }) => {
   return (
-    <ScrollView style={{ backgroundColor: Colors.primaryLight }}>
+    <ScrollView style={{ backgroundColor: Colors.primaryDark }}>
       <Formik
         initialValues={{ email: "" }}
         onSubmit={(values) => console.log(values)}
@@ -86,7 +86,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   formContainer: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
   },
   signUpLink: {
     color: Colors.primaryShade,

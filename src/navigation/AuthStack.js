@@ -75,10 +75,10 @@ export default AuthStack;
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
   },
   rootContainer: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: Colors.primaryDark,
     flex: 1,
   },
 });

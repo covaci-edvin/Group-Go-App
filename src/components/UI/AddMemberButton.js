@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 const AddMemberButton = ({ onPress, value, isValid }) => {
   const buttonColor = () => {
-    if (value.length !== 0 && !isValid) return Colors.primaryTint;
+    if (value.length !== 0 && !isValid) return Colors.primaryShadeNotActive;
     if (value.length === 0) return Colors.primaryShade;
     if (isValid) return Colors.primaryShade;
   };
@@ -22,7 +22,7 @@ const AddMemberButton = ({ onPress, value, isValid }) => {
         onPress={onPress}
         activeOpacity={0.7}
       >
-        <AntDesign name={"adduser"} size={24} color={Colors.primaryLight} />
+        <AntDesign name={"adduser"} size={24} color={Colors.primaryDark} />
       </TouchableOpacity>
     </View>
   );

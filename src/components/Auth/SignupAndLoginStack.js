@@ -9,7 +9,7 @@ const Tab = createMaterialTopTabNavigator();
 const SignupAndLoginStack = (props) => {
   return (
     <Tab.Navigator
-      style={{ backgroundColor: Colors.primaryLight }}
+      style={{ backgroundColor: Colors.primaryDark }}
       screenOptions={{
         tabBarLabelStyle: {
           fontSize: 16,
@@ -26,7 +26,7 @@ const SignupAndLoginStack = (props) => {
         tabBarActiveTintColor: Colors.primaryShade,
         tabBarInactiveTintColor: Colors.primaryDarkEvenLighter,
         tabBarStyle: {
-          backgroundColor: Colors.primaryLight,
+          backgroundColor: Colors.primaryDark,
         },
         tabBarItemStyle: { borderBottomColor: Colors.primaryDark },
         tabBarBounces: true,

@@ -7,7 +7,6 @@ import { store } from "./store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "./src/context/AuthContext";
 import AppNav from "./src/screens/AppNav";
-import { MenuProvider } from "react-native-popup-menu";
 
 export default function App() {
   return (
@@ -15,11 +14,9 @@ export default function App() {
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <AuthProvider>
-            <MenuProvider>
-              <NavigationContainer>
-                <AppNav />
-              </NavigationContainer>
-            </MenuProvider>
+            <NavigationContainer>
+              <AppNav />
+            </NavigationContainer>
           </AuthProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

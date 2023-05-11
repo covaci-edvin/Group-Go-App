@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import { store } from "./store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "./src/context/AuthContext";
 import AppNav from "./src/screens/AppNav";
+import { WebSocketProvider } from "./src/context/WebSocketContext";
 
 export default function App() {
   return (
@@ -14,9 +15,11 @@ export default function App() {
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <AuthProvider>
-            <NavigationContainer>
-              <AppNav />
-            </NavigationContainer>
+            <WebSocketProvider>
+              <NavigationContainer>
+                <AppNav />
+              </NavigationContainer>
+            </WebSocketProvider>
           </AuthProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

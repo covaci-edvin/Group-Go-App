@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectDestination,
   selectDistance,
+  selectOrigin,
   selectTravelTimeInformation,
   setDestination,
 } from "../../slices/navigationSlice";
@@ -23,13 +24,19 @@ import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 import TransportSelect from "./TransportSelect";
 import Dashes from "../UI/Dashes";
+import StartRouteButton from "./StartRouteButton";
+import StepsButton from "./StepsButton";
+import InviteSection from "./InviteSection";
+import { selectIsGroupSelected } from "../../slices/uiToggleSlice";
 
-const DestinationInfo = () => {
+const DestinationInfo = ({ mapRef }) => {
   const distance = useSelector(selectDistance);
   const destination = useSelector(selectDestination);
+  const origin = useSelector(selectOrigin);
   const duration = useSelector(selectTravelTimeInformation);
   const opacity = useSharedValue(0);
   const dispatch = useDispatch();
+  const isGroupSelected = useSelector(selectIsGroupSelected);
 
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
@@ -40,6 +47,15 @@ const DestinationInfo = () => {
   const clearDestination = () => {
     dispatch(
       setDestination({ coordinates: { latitude: null, logitude: null } })
+    );
+    mapRef.current.animateToRegion(
+      {
+        latitude: origin.coordinates.latitude,
+        longitude: origin.coordinates.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
+      500
     );
   };
 
@@ -105,6 +121,10 @@ const DestinationInfo = () => {
           </Text>
         </View>
       </View>
+      <View style={[tw`flex-row justify-center`, styles.buttonsContainer]}>
+        {/* <StepsButton /> */}
+        {isGroupSelected ? <InviteSection /> : <StartRouteButton />}
+      </View>
     </Animated.View>
   );
 };
@@ -128,5 +148,9 @@ const styles = StyleSheet.create({
   },
   distance: {
     color: Colors.primaryDarkEvenLighter,
+  },
+  buttonsContainer: {
+    marginTop: 15,
+    marginHorizontal: 10,
   },
 });

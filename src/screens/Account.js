@@ -13,9 +13,11 @@ import safeViewAndroid from "../utils/safeViewAndroid";
 import { Colors } from "../styles/colors";
 import { Feather, SimpleLineIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
+import { WebSocketContext } from "../context/WebSocketContext";
 
 const Account = (props) => {
   const { logout, userInfo } = useContext(AuthContext);
+  const { socketDisconnect } = useContext(WebSocketContext);
   return (
     <SafeAreaView style={[styles.container, safeViewAndroid.AndroidSafeArea]}>
       <View style={tw`flex-1`}>
@@ -39,7 +41,10 @@ const Account = (props) => {
             tw`flex-row items-center justify-center gap-2 rounded-full w-25 mt-5`,
             styles.logoutContainer,
           ]}
-          onPress={() => logout()}
+          onPress={() => {
+            logout();
+            socketDisconnect();
+          }}
         >
           <SimpleLineIcons
             name="logout"

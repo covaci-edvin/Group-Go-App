@@ -18,7 +18,7 @@ import DestinationInfo from "./DestinationInfo";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-const BottomSheet = () => {
+const BottomSheet = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
 
   const translateY = useSharedValue(0);
@@ -27,7 +27,7 @@ const BottomSheet = () => {
 
   const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 80;
   const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 5.2 - insets.bottom;
-  const MID_TRANSLATE_Y = -SCREEN_HEIGHT / 3.5;
+  const MID_TRANSLATE_Y = -SCREEN_HEIGHT / 3.8;
   const scrollTo = useCallback((destination, damping) => {
     "worklet";
     translateY.value = withSpring(destination, { damping: damping });
@@ -94,7 +94,7 @@ const BottomSheet = () => {
               <View style={[styles.line]} />
             )}
             {destination.coordinates.latitude ? (
-              <DestinationInfo />
+              <DestinationInfo mapRef={mapRef} />
             ) : (
               <DestinationSearch />
             )}

@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import tw from "twrnc";
 import { object, string } from "yup";
 import { Formik } from "formik";
@@ -13,6 +13,10 @@ import { Colors } from "../../styles/colors";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import AuthInput from "./AuthInput";
 import { AuthContext } from "../../context/AuthContext";
+import AuthButton from "./AuthButton";
+import { useSelector } from "react-redux";
+import { selectIsAuthLoading } from "../../slices/loadersSlice";
+import Loader from "../UI/Loader";
 
 let loginValidationSchema = object({
   email: string()
@@ -28,10 +32,14 @@ let loginValidationSchema = object({
 });
 
 const Login = ({ navigation }) => {
-  const { login, loginErrorMessage } = useContext(AuthContext);
+  const { login, loginErrorMessage, isLoading } = useContext(AuthContext);
+  const isAuthLoading = useSelector(selectIsAuthLoading);
   const onSumbitHandler = (data) => {
     login(data.email, data.password);
   };
+
+  useEffect(() => {}, []);
+
   return (
     <ScrollView style={{ backgroundColor: Colors.primaryDark }}>
       <Formik
@@ -81,30 +89,18 @@ const Login = ({ navigation }) => {
                   Forgot Password
                 </Text>
               </View>
-              <TouchableOpacity
-                style={[
-                  tw`bg-slate-50 shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
-                ]}
-                activeOpacity={0.6}
+              <AuthButton
+                isValid={isValid}
                 onPress={handleSubmit}
-                //   disabled={!isValid}
-              >
-                <SimpleLineIcons
-                  name="login"
-                  size={24}
-                  color={
-                    !isValid
-                      ? Colors.primaryDarkEvenLighter
-                      : Colors.primaryShade
-                  }
-                />
-              </TouchableOpacity>
+                icon={"login"}
+              />
               <Text
                 style={[tw`mt-2`, styles.signUpLink]}
                 onPress={() => navigation.navigate("Sign up")}
               >
                 Sign Up
               </Text>
+
               {loginErrorMessage && (
                 <Text style={[styles.errors, tw`mt-3`]}>
                   {loginErrorMessage}
@@ -139,4 +135,6 @@ const styles = StyleSheet.create({
     color: Colors.red,
     marginHorizontal: 23,
   },
+
+  button: {},
 });

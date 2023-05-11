@@ -17,6 +17,8 @@ import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
 
 import { AuthContext } from "../context/AuthContext";
+import { useSelector } from "react-redux";
+import { selectIsAuthLoading } from "../slices/loadersSlice";
 
 let createGroupValidationSchema = object({
   groupName: string().required("Please enter a group name"),
@@ -24,9 +26,12 @@ let createGroupValidationSchema = object({
 });
 
 const Groups = ({ navigation }) => {
-  const { createGroup } = useContext(AuthContext);
-  const onSumbitHandler = (values) => {
+  const { createGroup, getGroups, userToken } = useContext(AuthContext);
+  const isAuthLoading = useSelector(selectIsAuthLoading);
+
+  const onSumbitHandler = async (values) => {
     createGroup(values.groupName, values.groupDescription);
+    getGroups(userToken);
     navigation.goBack();
   };
 

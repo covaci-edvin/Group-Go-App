@@ -14,6 +14,7 @@ import AddMember from "../components/Group/AddMember";
 import MyResponseModal from "../components/UI/MyResponseModal";
 import GroupHeaderInfo from "../components/Group/GroupHeaderInfo";
 import { AuthContext } from "../context/AuthContext";
+import { WebSocketContext } from "../context/WebSocketContext";
 
 const GroupInfo = ({ navigation }) => {
   const { group } = useSelector(selectEditGroup);
@@ -30,6 +31,8 @@ const GroupInfo = ({ navigation }) => {
     deleteGroup,
     leaveGroup,
   } = useContext(AuthContext);
+  const { deleteGroup: clearRoom, leaveGroup: clearSocketOnGroupLeave } =
+    useContext(WebSocketContext);
 
   const toggleDeleteMemberModal = () => {
     setModalVisible(!isModalVisible);
@@ -60,11 +63,13 @@ const GroupInfo = ({ navigation }) => {
 
   const deleteGroupHandler = () => {
     deleteGroup(group.id);
-    goBackAfterOneSecond();
+    clearRoom(group.id);
+    navigation.goBack();
   };
 
   const leaveGroupHandler = () => {
     leaveGroup(group.id, userInfo.user.email);
+    clearSocketOnGroupLeave(group.id);
     goBackAfterOneSecond();
   };
 

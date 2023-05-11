@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_BASE_URL } from "@env";
 import { selectGroups, setGroups } from "../slices/groupsSlice";
 import { setEditGroup } from "../slices/editGroupSlice";
+import { setIsAuthLoading } from "../slices/loadersSlice";
 
 export const AuthContext = createContext();
 
@@ -12,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [componentIsLoading, setComponentIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const [signupErrorMessage, setSignupErrorMessage] = useState("");
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    setIsLoading(true);
+    dispatch(setIsAuthLoading(true));
     axios
       .post(`${API_BASE_URL}/users/login`, {
         email: email,
@@ -57,12 +58,12 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => {
         setLoginErrorMessage(err.response?.data.message);
         console.log(`login error ${err}`);
-      });
-    setIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const signup = async (name, email, password, passwordConfirm) => {
-    setIsLoading(true);
+    dispatch(setIsAuthLoading(true));
     axios
       .post(`${API_BASE_URL}/users/signup`, {
         name,
@@ -80,12 +81,12 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => {
         setSignupErrorMessage(err.response.data.message);
         console.log(err);
-      });
-    setIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const addMember = async (groupId, email) => {
-    setComponentIsLoading(true);
+    dispatch(setIsAuthLoading(true));
     axios
       .post(
         `${API_BASE_URL}/groups/${groupId}/members`,
@@ -105,12 +106,12 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => {
         console.log("addMemberError");
         setAddMemberErrorMessage(err.response.data.message);
-      });
-    setComponentIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const deleteMember = async (groupId, email) => {
-    setComponentIsLoading(true);
+    dispatch(setIsAuthLoading(true));
     axios
       .delete(`${API_BASE_URL}/groups/${groupId}/members`, {
         data: {
@@ -126,30 +127,32 @@ export const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         console.log("removeMemberError", err.data);
-      });
-    setComponentIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
-  const getGroups = async () => {
-    setComponentIsLoading(true);
+  const getGroups = (token) => {
+    dispatch(setIsAuthLoading(true));
     axios
       .get(`${API_BASE_URL}/users/me`, {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
+        console.log("getGroups");
         dispatch(setGroups(res.data.data.data.groups));
       })
       .catch((err) => {
         console.log("getGroupsError");
-        console.log(err);
-      });
-    setComponentIsLoading(false);
+        console.log(err.message);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const leaveGroup = async (groupId, email) => {
-    setComponentIsLoading(true);
+    dispatch(setIsAuthLoading(true));
+
     axios
       .delete(`${API_BASE_URL}/groups/${groupId}/members`, {
         data: {
@@ -165,12 +168,12 @@ export const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         console.log("leaveGroupError", err.message);
-      });
-    setComponentIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const createGroup = async (groupName, groupDescription) => {
-    setIsLoading(true);
+    dispatch(setIsAuthLoading(true));
     axios
       .post(
         `${API_BASE_URL}/users/groups`,
@@ -188,11 +191,12 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => {
         console.log("createGroupError");
         console.log(err.response);
-      });
-    setIsLoading(false);
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const deleteGroup = async (groupId) => {
+    dispatch(setIsAuthLoading(true));
     axios
       .delete(`${API_BASE_URL}/groups/${groupId}`, {
         headers: {
@@ -204,7 +208,8 @@ export const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         console.log(err.response.data);
-      });
+      })
+      .finally(() => dispatch(setIsAuthLoading(false)));
   };
 
   const updateGroup = async (groupId, groupName, groupDescription) => {
@@ -233,6 +238,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setIsLoading(true);
     setUserToken(null);
+    setUserInfo(null);
     AsyncStorage.removeItem("UserToken");
     AsyncStorage.removeItem("UserInfo");
     setIsLoading(false);
@@ -257,7 +263,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     isLoggedIn();
-  }, []);
+  }, [userToken]);
 
   return (
     <AuthContext.Provider

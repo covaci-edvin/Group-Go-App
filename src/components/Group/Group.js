@@ -65,6 +65,7 @@ const Group = ({ name, members, adminId, accountId, group, navigation }) => {
     } else if (selectedGroup?.id !== group.id) {
       deselectGroupAnimationHandler();
     }
+    dispatch(setEditGroup(group));
   }, [selectedGroup]);
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const Group = ({ name, members, adminId, accountId, group, navigation }) => {
           ]}
           activeOpacity={0.9}
           onPress={onGroupPressHandler}
+          disabled={accountId === adminId ? false : true}
         >
           <View style={tw`flex-1 p-3 justify-center`}>
             <StatusLabel

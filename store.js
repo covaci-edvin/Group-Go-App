@@ -4,6 +4,7 @@ import uiToggleReducer from "./src/slices/uiToggleSlice";
 import editGroupReducer from "./src/slices/editGroupSlice";
 import groupsReducer from "./src/slices/groupsSlice";
 import selectedGroupReducer from "./src/slices/selectedGroupSlice";
+import loadersReducer from "./src/slices/loadersSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     group: editGroupReducer,
     groups: groupsReducer,
     selectedGroup: selectedGroupReducer,
+    loaders: loadersReducer,
   },
 });

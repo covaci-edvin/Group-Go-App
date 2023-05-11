@@ -13,6 +13,7 @@ import { Colors } from "../../styles/colors";
 import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 import AuthInput from "./AuthInput";
 import { AuthContext } from "../../context/AuthContext";
+import AuthButton from "./AuthButton";
 
 let loginValidationSchema = object({
   name: string().required("Please enter a username"),
@@ -104,23 +105,11 @@ const Login = ({ navigation }) => {
               )}
             </View>
             <View style={tw`flex-1 items-center gap-2 mt-5`}>
-              <TouchableOpacity
-                style={[
-                  tw`bg-slate-50 shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
-                ]}
-                activeOpacity={0.6}
+              <AuthButton
+                isValid={isValid}
                 onPress={handleSubmit}
-              >
-                <SimpleLineIcons
-                  name="login"
-                  size={24}
-                  color={
-                    !isValid
-                      ? Colors.primaryDarkEvenLighter
-                      : Colors.primaryShade
-                  }
-                />
-              </TouchableOpacity>
+                icon={"login"}
+              />
               <Text
                 style={[tw`mt-2`, styles.signUpLink]}
                 onPress={() => navigation.navigate("Login")}

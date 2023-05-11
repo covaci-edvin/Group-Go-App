@@ -11,7 +11,7 @@ const ShowRouteButton = ({ routeCoordinates, centerRoute }) => {
     <TouchableOpacity
       activeOpacity={0.8}
       style={[
-        tw`h-12 w-12 shadow-lg items-center justify-center rounded-full top-1/2.3 right-3`,
+        tw`h-12 w-12 shadow-lg items-center justify-center rounded-full top-1/1.92 right-3`,
         {
           position: "absolute",
           backgroundColor: Colors.primaryDark,

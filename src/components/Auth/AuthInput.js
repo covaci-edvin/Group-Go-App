@@ -21,21 +21,21 @@ const AuthInput = (props) => {
         <MaterialIcons
           name="alternate-email"
           size={25}
-          color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+          color={isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive}
           style={styles.icon}
         />
       )}
       {props.type === "password" && (
         <PasswordIcon
           size={25}
-          color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+          color={isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive}
         />
       )}
       {props.type === "name" && (
         <Ionicons
           name="person-outline"
           size={25}
-          color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+          color={isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive}
         />
       )}
       <TextInput
@@ -50,6 +50,7 @@ const AuthInput = (props) => {
         onChangeText={props.onChangeText}
         style={[tw``, styles.input]}
         value={props.value}
+        placeholderTextColor={Colors.primaryDarkLighter}
       />
       {props.type === "password" && (
         <TouchableOpacity
@@ -60,7 +61,9 @@ const AuthInput = (props) => {
           <Ionicons
             name={showPassword ? "eye" : "eye-off"}
             size={20}
-            color={isFocused ? Colors.primaryShade : Colors.primaryTint}
+            color={
+              isFocused ? Colors.primaryShade : Colors.primaryShadeNotActive
+            }
           />
         </TouchableOpacity>
       )}
@@ -83,14 +86,14 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     fontSize: 18,
-    color: Colors.primaryDark,
+    color: Colors.primaryLight,
   },
   inputFocus: {
     borderColor: Colors.primaryShade,
     borderWidth: 1,
   },
   inputBlur: {
-    borderColor: Colors.primaryTint,
+    borderColor: Colors.primaryShadeNotActive,
     borderWidth: 1,
   },
 });

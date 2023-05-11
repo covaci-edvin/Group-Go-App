@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   Keyboard,
   Platform,
+  Text,
+  View,
 } from "react-native";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
@@ -20,9 +22,11 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
+import { selectDestination } from "../../slices/navigationSlice";
 
 const BottomControls = ({ navigation }) => {
   const isGroupSelected = useSelector(selectIsGroupSelected);
+  const destination = useSelector(selectDestination);
   const insets = useSafeAreaInsets();
 
   const progress = useSharedValue(75 + insets.bottom);
@@ -48,14 +52,6 @@ const BottomControls = ({ navigation }) => {
   ];
   const iconsColor =
     Platform.OS === "ios" ? Colors.primaryDarkEvenLighter : Colors.primaryDark;
-  // useEffect(() => {
-  //   Keyboard.addListener("keyboardDidShow", () => {
-  //     setContainerHeight(75);
-  //   });
-  //   Keyboard.addListener("keyboardDidHide", () => {
-  //     setContainerHeight(75 + insets.bottom);
-  //   });
-  // }, []);
 
   return (
     <Animated.View
@@ -82,7 +78,11 @@ const BottomControls = ({ navigation }) => {
               { backgroundColor: Colors.primaryDark },
             ]}
             activeOpacity={0.6}
-            onPress={() => navigation.navigate("Groups")}
+            onPress={() => {
+              isGroupSelected
+                ? navigation.navigate("GroupInfoScreen")
+                : navigation.navigate("Groups");
+            }}
           >
             <AntDesign
               name={!isGroupSelected ? "addusergroup" : "adduser"}

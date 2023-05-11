@@ -24,7 +24,7 @@ const SignupAndLoginStack = (props) => {
         },
         tabBarContentContainerStyle: {},
         tabBarActiveTintColor: Colors.primaryShade,
-        tabBarInactiveTintColor: Colors.primaryDarkEvenLighter,
+        tabBarInactiveTintColor: Colors.primaryDarkLighter,
         tabBarStyle: {
           backgroundColor: Colors.primaryDark,
         },

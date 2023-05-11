@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import tw from "twrnc";
 import Map from "../components/Map/Map";
 import BottomControls from "../components/Map/BottomControls";
@@ -8,12 +8,23 @@ import TopControls from "../components/Map/TopControls";
 import MyLocationButton from "../components/Map/MyLocationButton";
 import ShowRouteButton from "../components/Map/ShowRouteButton";
 import { useSelector } from "react-redux";
-import { selectDestination } from "../slices/navigationSlice";
+import { selectDestination, selectOrigin } from "../slices/navigationSlice";
+import { WebSocketContext } from "../context/WebSocketContext";
+import { selectGroups } from "../slices/groupsSlice";
 
 const MapScreen = (props) => {
   const destination = useSelector(selectDestination);
+  const { groups } = useSelector(selectGroups);
+  const { joinRooms } = useContext(WebSocketContext);
+  const origin = useSelector(selectOrigin);
+
   const [routeCoordinates, setRouteCoordinates] = useState();
   const mapRef = useRef();
+
+  useEffect(() => {
+    console.log(groups.length);
+    joinRooms(groups);
+  }, [groups]);
 
   const centerRoute = (coordinates) => {
     mapRef.current.fitToCoordinates(coordinates, {
@@ -37,8 +48,11 @@ const MapScreen = (props) => {
           routeCoordinates={routeCoordinates}
         />
       )}
-      <BottomSheet />
-      <BottomControls navigation={props.navigation} />
+      <BottomSheet mapRef={mapRef} />
+      {!destination.coordinates.latitude && (
+        <BottomControls navigation={props.navigation} />
+      )}
+      {/* <SocketioTest /> */}
     </View>
   );
 };

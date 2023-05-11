@@ -3,19 +3,33 @@ import React from "react";
 import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 import { AntDesign } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectIsAuthLoading } from "../../slices/loadersSlice";
+import Loader from "./Loader";
 
 const Button = ({ onPress, text, isValid }) => {
+  const isAuthLoading = useSelector(selectIsAuthLoading);
   return (
     <View style={[tw`items-center`, styles.footerContainer]}>
       <TouchableOpacity
         style={[
-          tw`flex-row items-center justify-center w-1/2 gap-2 rounded-md h-12`,
+          tw`items-center justify-center w-1/2 gap-2 rounded-md h-12`,
           styles.button,
         ]}
         onPress={onPress}
       >
-        <Text style={[styles.text]}>{text}</Text>
-        <AntDesign name={"addusergroup"} size={30} color={Colors.primaryDark} />
+        {isAuthLoading ? (
+          <Loader />
+        ) : (
+          <View style={tw`flex-row items-center justify-center gap-2`}>
+            <Text style={[styles.text]}>{text}</Text>
+            <AntDesign
+              name={"addusergroup"}
+              size={30}
+              color={Colors.primaryDark}
+            />
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );

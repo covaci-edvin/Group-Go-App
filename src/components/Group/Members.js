@@ -9,7 +9,6 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Members = ({ toggleModal, setDeleteMember, accountUserId }) => {
   const { group } = useSelector(selectEditGroup);
-  const { componentIsLoading } = useContext(AuthContext);
 
   const renderItem = useCallback(
     ({ item }) => (
@@ -42,7 +41,6 @@ const Members = ({ toggleModal, setDeleteMember, accountUserId }) => {
           renderItem={renderItem}
         />
       </View>
-      {componentIsLoading && <Text>loading</Text>}
     </View>
   );
 };

@@ -3,8 +3,12 @@ import React from "react";
 import { Colors } from "../../styles/colors";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectIsAuthLoading } from "../../slices/loadersSlice";
+import Loader from "./Loader";
 
 const AddMemberButton = ({ onPress, value, isValid }) => {
+  const isAuthLoading = useSelector(selectIsAuthLoading);
   const buttonColor = () => {
     if (value.length !== 0 && !isValid) return Colors.primaryShadeNotActive;
     if (value.length === 0) return Colors.primaryShade;
@@ -22,7 +26,11 @@ const AddMemberButton = ({ onPress, value, isValid }) => {
         onPress={onPress}
         activeOpacity={0.7}
       >
-        <AntDesign name={"adduser"} size={24} color={Colors.primaryDark} />
+        {isAuthLoading ? (
+          <Loader />
+        ) : (
+          <AntDesign name={"adduser"} size={24} color={Colors.primaryDark} />
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -32,7 +40,8 @@ export default AddMemberButton;
 
 const styles = StyleSheet.create({
   button: {
-    padding: 10,
+    height: 44,
+    // padding: 10,
   },
   buttonContainer: {
     marginHorizontal: 10,

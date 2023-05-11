@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import { Colors } from "../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import AuthInput from "./AuthInput";
+import AuthButton from "./AuthButton";
 
 let loginValidationSchema = object({
   email: string()
@@ -51,23 +52,11 @@ const Login = ({ navigation }) => {
               )}
             </View>
             <View style={tw`flex-1 items-center gap-2 mt-5 mx-5`}>
-              <TouchableOpacity
-                style={[
-                  tw`bg-slate-50 shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
-                ]}
-                activeOpacity={0.6}
+              <AuthButton
+                isValid={isValid}
                 onPress={handleSubmit}
-              >
-                <Feather
-                  name="send"
-                  size={24}
-                  color={
-                    !isValid
-                      ? Colors.primaryDarkEvenLighter
-                      : Colors.primaryShade
-                  }
-                />
-              </TouchableOpacity>
+                icon={"send"}
+              />
               <Text
                 style={[tw`mt-2`, styles.signUpLink]}
                 onPress={() => navigation.navigate("Login")}

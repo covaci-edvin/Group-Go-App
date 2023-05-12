@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { selectSelectedGroup } from "../../slices/selectedGroupSlice";
 import { AuthContext } from "../../context/AuthContext";
 
-const InviteSection = () => {
+const InviteSection = ({ destination }) => {
   const { sendInvitation } = useContext(WebSocketContext);
   const { userInfo } = useContext(AuthContext);
   const { selectedGroup } = useSelector(selectSelectedGroup);
@@ -27,15 +27,15 @@ const InviteSection = () => {
           tw`items-center justify-center rounded-3xl shadow-md flex-row gap-1`,
           styles.button,
         ]}
-        onPress={() =>
+        onPress={() => {
           sendInvitation(
             selectedGroup.id,
             userInfo.user.name,
-            selectedGroup.name
-          )
-        }
+            selectedGroup.name,
+            destination
+          );
+        }}
       >
-        {/* <Text style={[tw`text-base`, styles.text]}>Invite</Text> */}
         <MaterialIcons name="send" size={20} color={Colors.primaryLight} />
       </TouchableOpacity>
     </View>

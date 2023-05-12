@@ -34,6 +34,7 @@ const DestinationInfo = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
   const origin = useSelector(selectOrigin);
   const duration = useSelector(selectTravelTimeInformation);
+
   const opacity = useSharedValue(0);
   const dispatch = useDispatch();
   const isGroupSelected = useSelector(selectIsGroupSelected);
@@ -123,7 +124,11 @@ const DestinationInfo = ({ mapRef }) => {
       </View>
       <View style={[tw`flex-row justify-center`, styles.buttonsContainer]}>
         {/* <StepsButton /> */}
-        {isGroupSelected ? <InviteSection /> : <StartRouteButton />}
+        {isGroupSelected ? (
+          <InviteSection destination={destination} />
+        ) : (
+          <StartRouteButton />
+        )}
       </View>
     </Animated.View>
   );

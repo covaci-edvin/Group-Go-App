@@ -15,11 +15,24 @@ import { Colors } from "../../styles/colors";
 import { useSelector } from "react-redux";
 import { selectDestination } from "../../slices/navigationSlice";
 import DestinationInfo from "./DestinationInfo";
+import { selectUserJoined } from "../../slices/uiToggleSlice";
+import GroupRouteInfo from "./GroupRouteInfo";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
+const BottomSheetContent = ({ mapRef }) => {
+  const destination = useSelector(selectDestination);
+
+  return destination.coordinates.latitude ? (
+    <DestinationInfo mapRef={mapRef} />
+  ) : (
+    <DestinationSearch />
+  );
+};
+
 const BottomSheet = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
+  const userJoined = useSelector(selectUserJoined);
 
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
@@ -28,6 +41,8 @@ const BottomSheet = ({ mapRef }) => {
   const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 80;
   const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 5.2 - insets.bottom;
   const MID_TRANSLATE_Y = -SCREEN_HEIGHT / 3.8;
+  const USER_JOINED_TRANSLATE_Y = -SCREEN_HEIGHT / 13 - insets.bottom;
+
   const scrollTo = useCallback((destination, damping) => {
     "worklet";
     translateY.value = withSpring(destination, { damping: damping });
@@ -55,9 +70,10 @@ const BottomSheet = ({ mapRef }) => {
   }, []);
 
   useEffect(() => {
-    destination.coordinates.latitude
+    destination.coordinates.latitude && !userJoined
       ? scrollTo(MID_TRANSLATE_Y, 50)
       : scrollTo(MIN_TRANSLATE_Y, 50);
+    userJoined && scrollTo(USER_JOINED_TRANSLATE_Y, 50);
     Keyboard.addListener("keyboardDidShow", () => {
       scrollTo(MAX_TRANSLATE_Y, 50);
     });
@@ -66,7 +82,7 @@ const BottomSheet = ({ mapRef }) => {
         ? scrollTo(MID_TRANSLATE_Y, 50)
         : scrollTo(MIN_TRANSLATE_Y, 50);
     });
-  }, [destination]);
+  }, [destination, userJoined]);
 
   const rBottomSheetStyle = useAnimatedStyle(() => {
     return {
@@ -93,10 +109,10 @@ const BottomSheet = ({ mapRef }) => {
             {!destination.coordinates.latitude && (
               <View style={[styles.line]} />
             )}
-            {destination.coordinates.latitude ? (
-              <DestinationInfo mapRef={mapRef} />
+            {!userJoined ? (
+              <BottomSheetContent mapRef={mapRef} />
             ) : (
-              <DestinationSearch />
+              <GroupRouteInfo mapRef={mapRef} />
             )}
           </BlurView>
         </View>

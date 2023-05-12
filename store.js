@@ -5,6 +5,8 @@ import editGroupReducer from "./src/slices/editGroupSlice";
 import groupsReducer from "./src/slices/groupsSlice";
 import selectedGroupReducer from "./src/slices/selectedGroupSlice";
 import loadersReducer from "./src/slices/loadersSlice";
+import invitedRouteReducer from "./src/slices/invitedRouteSlice";
+import socketIoReducer from "./src/slices/socketIoSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +16,7 @@ export const store = configureStore({
     groups: groupsReducer,
     selectedGroup: selectedGroupReducer,
     loaders: loadersReducer,
+    invitedRoute: invitedRouteReducer,
+    socketIo: socketIoReducer,
   },
 });

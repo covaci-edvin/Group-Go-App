@@ -134,14 +134,14 @@ export const AuthProvider = ({ children }) => {
   const getGroups = (token) => {
     dispatch(setIsAuthLoading(true));
     axios
-      .get(`${API_BASE_URL}/users/me`, {
+      .get(`${API_BASE_URL}/groups`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         console.log("getGroups");
-        dispatch(setGroups(res.data.data.data.groups));
+        dispatch(setGroups(res.data.data.data));
       })
       .catch((err) => {
         console.log("getGroupsError");

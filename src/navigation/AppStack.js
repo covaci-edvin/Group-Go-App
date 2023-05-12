@@ -6,19 +6,76 @@ import Account from "../screens/Account";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../styles/colors";
 import GroupsStack from "./GroupsStack";
-import { AuthContext } from "../context/AuthContext";
-import { color } from "react-native-reanimated";
-import SocketioTest from "../components/Map/SocketioTest";
 import { WebSocketProvider } from "../context/WebSocketContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsGroupSelected,
+  selectIsUserInvited,
+  setIsUserInvited,
+  setUserJoined,
+  toggleIsGroupSelected,
+} from "../slices/uiToggleSlice";
+import MyInvitationModal from "../components/UI/MyInvitationModal";
+import {
+  selectInvitedRouteAdminName,
+  selectInvitedRouteDestination,
+  selectInvitedRouteGroupName,
+  clearInvitedRoute,
+  selectInvitedRouteGroupId,
+} from "../slices/invitedRouteSlice";
+import { setDestination } from "../slices/navigationSlice";
+import { setSelectedGroup } from "../slices/selectedGroupSlice";
+import { selectGroups } from "../slices/groupsSlice";
 
 const Drawer = createDrawerNavigator();
 
 const AppStack = (props) => {
+  const isUserInvited = useSelector(selectIsUserInvited);
+  const dispatch = useDispatch();
+  const { groups } = useSelector(selectGroups);
+  const inviteRouteDestination = useSelector(selectInvitedRouteDestination);
+  const inviteRouteAdminName = useSelector(selectInvitedRouteAdminName);
+  const inviteRouteGroupName = useSelector(selectInvitedRouteGroupName);
+  const inviteRouteGroupId = useSelector(selectInvitedRouteGroupId);
 
-  useEffect(() => {
-  }, []);
+  const onDeclineHandler = () => {
+    dispatch(setIsUserInvited(false));
+    dispatch(clearInvitedRoute());
+  };
+
+  const onJoinHandler = () => {
+    dispatch(
+      setDestination({
+        coordinates: {
+          latitude: inviteRouteDestination.coordinates.latitude,
+          longitude: inviteRouteDestination.coordinates.longitude,
+        },
+        description: inviteRouteDestination.description,
+      })
+    );
+
+    groups.map((group) => {
+      if (group.id === inviteRouteGroupId) {
+        dispatch(setSelectedGroup(group));
+        dispatch(toggleIsGroupSelected(true));
+      }
+    });
+
+    dispatch(setUserJoined(true));
+    dispatch(setIsUserInvited(false));
+  };
+
+  useEffect(() => {}, []);
   return (
     <WebSocketProvider>
+      <MyInvitationModal
+        isVisible={isUserInvited}
+        name={inviteRouteGroupName}
+        title={"Invitation"}
+        message={`${inviteRouteAdminName} invited you to the group:`}
+        onDeclineHandler={onDeclineHandler}
+        onJoinHandler={onJoinHandler}
+      />
       <Drawer.Navigator
         drawerContent={(props) => <Account {...props} />}
         screenOptions={{

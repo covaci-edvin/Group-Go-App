@@ -49,6 +49,13 @@ const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
     centerRoute(params.coordinates);
   };
 
+  const onUserLocationChange = (location) => {
+    setOrigin({
+      latitude: location.nativeEvent.coordinate.latitude,
+      longitude: location.nativeEvent.coordinate.longitude,
+    });
+  };
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -80,7 +87,6 @@ const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         customMapStyle={MapStyles}
-        // showsCompass={true}
         style={tw`flex-1`}
         mapPadding={mapPadding}
         initialRegion={{
@@ -89,8 +95,12 @@ const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        loadingEnabled={true}
         showsUserLocation={true}
         showsMyLocationButton={false}
+        loadingBackgroundColor={Colors.primaryDark}
+        loadingIndicatorColor={Colors.primaryShade}
+        onUserLocationChange={onUserLocationChange}
         onPress={(e) => {
           dispatch(
             setDestination({

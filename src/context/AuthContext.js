@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     dispatch(setGroups(updatedGroups));
   };
 
-  const login = async (email, password) => {
+  const login = (email, password) => {
     dispatch(setIsAuthLoading(true));
     axios
       .post(`${API_BASE_URL}/users/login`, {
@@ -187,7 +187,10 @@ export const AuthProvider = ({ children }) => {
           },
         }
       )
-      .then((res) => {})
+      .then((res) => {
+        console.log("getttt");
+        getGroups(userToken);
+      })
       .catch((err) => {
         console.log("createGroupError");
         console.log(err.response);
@@ -263,7 +266,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     isLoggedIn();
-  }, [userToken]);
+  }, []);
 
   return (
     <AuthContext.Provider

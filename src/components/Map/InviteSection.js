@@ -4,40 +4,78 @@ import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { WebSocketContext } from "../../context/WebSocketContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectSelectedGroup } from "../../slices/selectedGroupSlice";
 import { AuthContext } from "../../context/AuthContext";
+import { selectJoinedMembers } from "../../slices/invitedRouteSlice";
+import Loader from "../UI/Loader";
+import {
+  selectInvitationSent,
+  setGroupRouteStarted,
+  setIsUserInvited,
+  setRouteStarted,
+} from "../../slices/uiToggleSlice";
+import StartRouteButton from "./StartRouteButton";
+import WaitingToJoin from "./WaitingToJoin";
 
 const InviteSection = ({ destination }) => {
-  const { sendInvitation } = useContext(WebSocketContext);
+  const { sendInvitation, groupRouteStarted } = useContext(WebSocketContext);
   const { userInfo } = useContext(AuthContext);
   const { selectedGroup } = useSelector(selectSelectedGroup);
+  const joinedMembers = useSelector(selectJoinedMembers);
+  const isInvitationSent = useSelector(selectInvitationSent);
+  const dispatch = useDispatch();
+
+  const handleGroupRouteStart = () => {
+    groupRouteStarted(selectedGroup.id);
+    dispatch(setGroupRouteStarted(true));
+    dispatch(setRouteStarted(true));
+  };
+
   return (
-    <View style={tw`flex-row justify-between items-center`}>
+    <View
+      style={[tw`flex-row justify-between items-center `, styles.container]}
+    >
       <View style={tw`w-1/1.7`}>
-        <Text
-          numberOfLines={2}
-          style={[tw`text-xs text-center`, styles.message]}
-        >
-          Send a join route invitation to the group members
-        </Text>
+        {isInvitationSent ? (
+          <WaitingToJoin />
+        ) : (
+          <Text
+            numberOfLines={2}
+            style={[tw`text-xs text-center`, styles.message]}
+          >
+            Send a join route invitation to the group members
+          </Text>
+        )}
       </View>
-      <TouchableOpacity
-        style={[
-          tw`items-center justify-center rounded-3xl shadow-md flex-row gap-1`,
-          styles.button,
-        ]}
-        onPress={() => {
-          sendInvitation(
-            selectedGroup.id,
-            userInfo.user.name,
-            selectedGroup.name,
-            destination
-          );
-        }}
-      >
-        <MaterialIcons name="send" size={20} color={Colors.primaryLight} />
-      </TouchableOpacity>
+
+      {joinedMembers.length === 0 ? (
+        <TouchableOpacity
+          style={[
+            tw`items-center justify-center rounded-3xl shadow-md flex-row gap-1`,
+            styles.button,
+          ]}
+          disabled={isInvitationSent}
+          onPress={() => {
+            sendInvitation(
+              selectedGroup.id,
+              userInfo.user.name,
+              selectedGroup.name,
+              destination
+            );
+          }}
+        >
+          <MaterialIcons
+            name="send"
+            size={20}
+            color={
+              isInvitationSent ? Colors.primaryDarkLighter : Colors.primaryLight
+            }
+          />
+        </TouchableOpacity>
+      ) : (
+        <StartRouteButton onPress={handleGroupRouteStart} />
+      )}
     </View>
   );
 };
@@ -45,6 +83,9 @@ const InviteSection = ({ destination }) => {
 export default InviteSection;
 
 const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 20,
+  },
   button: {
     height: 50,
     width: 130,

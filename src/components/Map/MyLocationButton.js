@@ -10,6 +10,7 @@ import { selectOrigin } from "../../slices/navigationSlice";
 
 const MyLocationButton = ({ mapRef }) => {
   const origin = useSelector(selectOrigin);
+  // const currentLocation= useSelector()
 
   const centerCurrentLocation = () => {
     mapRef.current.animateToRegion(

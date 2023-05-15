@@ -1,11 +1,5 @@
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -25,19 +19,24 @@ import { Colors } from "../../styles/colors";
 import TransportSelect from "./TransportSelect";
 import Dashes from "../UI/Dashes";
 import StartRouteButton from "./StartRouteButton";
-import StepsButton from "./StepsButton";
 import InviteSection from "./InviteSection";
-import { selectIsGroupSelected } from "../../slices/uiToggleSlice";
+import {
+  selectIsGroupSelected,
+  selectRouteStarted,
+  setIsInvitationSent,
+  setRouteStarted,
+} from "../../slices/uiToggleSlice";
 
 const DestinationInfo = ({ mapRef }) => {
   const distance = useSelector(selectDistance);
   const destination = useSelector(selectDestination);
   const origin = useSelector(selectOrigin);
   const duration = useSelector(selectTravelTimeInformation);
+  const routeStarted = useSelector(selectRouteStarted);
 
-  const opacity = useSharedValue(0);
   const dispatch = useDispatch();
   const isGroupSelected = useSelector(selectIsGroupSelected);
+  const opacity = useSharedValue(0);
 
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
@@ -46,6 +45,7 @@ const DestinationInfo = ({ mapRef }) => {
   }, []);
 
   const clearDestination = () => {
+    dispatch(setIsInvitationSent(false));
     dispatch(
       setDestination({ coordinates: { latitude: null, logitude: null } })
     );
@@ -58,6 +58,10 @@ const DestinationInfo = ({ mapRef }) => {
       },
       500
     );
+  };
+
+  const onStartRouteHandler = () => {
+    dispatch(setRouteStarted(true));
   };
 
   useEffect(() => {
@@ -123,11 +127,10 @@ const DestinationInfo = ({ mapRef }) => {
         </View>
       </View>
       <View style={[tw`flex-row justify-center`, styles.buttonsContainer]}>
-        {/* <StepsButton /> */}
         {isGroupSelected ? (
           <InviteSection destination={destination} />
         ) : (
-          <StartRouteButton />
+          <StartRouteButton onPress={onStartRouteHandler} />
         )}
       </View>
     </Animated.View>

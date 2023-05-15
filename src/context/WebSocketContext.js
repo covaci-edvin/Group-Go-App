@@ -4,13 +4,21 @@ import { AuthContext } from "./AuthContext";
 import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { selectGroups } from "../slices/groupsSlice";
-import { setIsUserInvited } from "../slices/uiToggleSlice";
+import {
+  setGroupRouteStarted,
+  setIsInvitationSent,
+  setIsUserInvited,
+} from "../slices/uiToggleSlice";
 import {
   setInvitedRouteAdminName,
   setInvitedRouteDestination,
   setInvitedRouteGroupName,
   setInvitedRouteAdminId,
   setInvitedRouteGroupId,
+  selectJoinedMembers,
+  addJoinedMember,
+  selectInvitedRouteAdminId,
+  removeJoinedMember,
 } from "../slices/invitedRouteSlice";
 import { setSelectedGroup } from "../slices/selectedGroupSlice";
 import { selectSocketId, setSocketId } from "../slices/socketIoSlice";
@@ -23,7 +31,9 @@ export const WebSocketProvider = ({ children }) => {
   const { userToken, userInfo } = useContext(AuthContext);
   const { groups } = useSelector(selectGroups);
   const socketId = useSelector(selectSocketId);
+  const joinedMembers = useSelector(selectJoinedMembers);
   const dispatch = useDispatch();
+  const invitedRouteAdminId = useSelector(selectInvitedRouteAdminId);
 
   const joinRooms = () => {
     console.log("joining");
@@ -41,6 +51,7 @@ export const WebSocketProvider = ({ children }) => {
       destination,
       socketId
     );
+    dispatch(setIsInvitationSent(true));
   };
 
   const deleteGroup = (groupId) => {
@@ -59,8 +70,12 @@ export const WebSocketProvider = ({ children }) => {
     socket.emit("joined-group-route", userInfo.user, adminId);
   };
 
-  const onGroupSelect = (groupId) => {
-    socket.emit("connect-to-the-room", groupId);
+  const leaveGroupRoute = (adminId) => {
+    socket.emit("leave-group-route", userInfo.user.id, adminId);
+  };
+
+  const groupRouteStarted = (groupId) => {
+    socket.emit("group-route-started", groupId);
   };
 
   const setInvitationDataHandler = (
@@ -84,7 +99,6 @@ export const WebSocketProvider = ({ children }) => {
     });
 
     socket.on("connect", () => {
-      // socket.emit("custom-id", userInfo.user.id);
       console.log(`${userInfo.user.name} connected with id: ${socket.id}`);
       dispatch(setSocketId(socket.id));
     });
@@ -107,8 +121,16 @@ export const WebSocketProvider = ({ children }) => {
       }
     );
 
-    socket.on("joined", (user) => {
-      console.log(userInfo.user.name, " 🙃 ", user);
+    socket.on("joined", (member) => {
+      dispatch(addJoinedMember(member));
+    });
+
+    socket.on("left", (memberId) => {
+      dispatch(removeJoinedMember(memberId));
+    });
+
+    socket.on("group-route-started", () => {
+      dispatch(setGroupRouteStarted(true));
     });
   }, []);
   return (
@@ -120,6 +142,8 @@ export const WebSocketProvider = ({ children }) => {
         deleteGroup,
         leaveGroup,
         joinGroupRoute,
+        leaveGroupRoute,
+        groupRouteStarted,
       }}
     >
       {children}

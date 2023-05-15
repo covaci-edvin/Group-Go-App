@@ -11,7 +11,6 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import SignupAndLoginStack from "../components/Auth/SignupAndLoginStack";
-import Loader from "../components/UI/Loader";
 
 const Stack = createNativeStackNavigator();
 

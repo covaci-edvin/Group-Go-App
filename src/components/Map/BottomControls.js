@@ -76,6 +76,8 @@ const BottomControls = ({ navigation }) => {
               tw`shadow-lg h-14 w-24 rounded-full flex items-center justify-center`,
               ,
               { backgroundColor: Colors.primaryDark },
+              ,
+              styles.button,
             ]}
             activeOpacity={0.6}
             onPress={() => {
@@ -102,6 +104,11 @@ const BottomControls = ({ navigation }) => {
 export default BottomControls;
 
 const styles = StyleSheet.create({
+  button: {
+    borderColor: Colors.primaryShade,
+    borderRightWidth: 2,
+    borderLeftWidth: 2,
+  },
   container: {
     shadowColor: "#000",
     shadowOffset: { height: -5, width: 0 },

@@ -19,7 +19,7 @@ let editGroupValidationSchema = object({
 });
 
 const AddMember = ({ groupId }) => {
-  const { addMember } = useContext(AuthContext);
+  const { addMember, getGroups, userToken } = useContext(AuthContext);
   const refInput = useRef();
   const [addMemberEmail, setAddMemberEmail] = useState();
 
@@ -47,6 +47,7 @@ const AddMember = ({ groupId }) => {
       initialValues={{ email: "" }}
       onSubmit={(values) => {
         addMember(groupId, values.email);
+        // getGroups(userToken);
       }}
       validateOnMount={true}
       validationSchema={editGroupValidationSchema}

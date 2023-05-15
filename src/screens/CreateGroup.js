@@ -26,12 +26,10 @@ let createGroupValidationSchema = object({
 });
 
 const Groups = ({ navigation }) => {
-  const { createGroup, getGroups, userToken } = useContext(AuthContext);
-  const isAuthLoading = useSelector(selectIsAuthLoading);
+  const { createGroup } = useContext(AuthContext);
 
   const onSumbitHandler = async (values) => {
     createGroup(values.groupName, values.groupDescription);
-    getGroups(userToken);
     navigation.goBack();
   };
 

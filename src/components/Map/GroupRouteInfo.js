@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useCallback, useContext } from "react";
 import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,15 +12,24 @@ import {
 import { selectOrigin, setDestination } from "../../slices/navigationSlice";
 import Loader from "../UI/Loader";
 import { resetSelectedGroup } from "../../slices/selectedGroupSlice";
+import { WebSocketContext } from "../../context/WebSocketContext";
+import {
+  clearInvitedRoute,
+  selectInvitedRouteAdminId,
+} from "../../slices/invitedRouteSlice";
 
 const GroupRouteInfo = ({ mapRef }) => {
-  const userJoined = useSelector(selectUserJoined);
   const origin = useSelector(selectOrigin);
   const dispatch = useDispatch();
+  const invitedRouteAdminId = useSelector(selectInvitedRouteAdminId);
+  const { leaveGroupRoute } = useContext(WebSocketContext);
+
   const leaveGroupRouteHandler = () => {
     dispatch(setUserJoined(false));
     dispatch(toggleIsGroupSelected(false));
     dispatch(resetSelectedGroup());
+    leaveGroupRoute(invitedRouteAdminId);
+    dispatch(clearInvitedRoute());
     dispatch(
       setDestination({ coordinates: { latitude: null, logitude: null } })
     );

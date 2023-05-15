@@ -10,13 +10,9 @@ import tw from "twrnc";
 import { object, string } from "yup";
 import { Formik } from "formik";
 import { Colors } from "../../styles/colors";
-import { SimpleLineIcons } from "@expo/vector-icons";
 import AuthInput from "./AuthInput";
 import { AuthContext } from "../../context/AuthContext";
 import AuthButton from "./AuthButton";
-import { useSelector } from "react-redux";
-import { selectIsAuthLoading } from "../../slices/loadersSlice";
-import Loader from "../UI/Loader";
 
 let loginValidationSchema = object({
   email: string()
@@ -32,8 +28,7 @@ let loginValidationSchema = object({
 });
 
 const Login = ({ navigation }) => {
-  const { login, loginErrorMessage, isLoading } = useContext(AuthContext);
-  const isAuthLoading = useSelector(selectIsAuthLoading);
+  const { login, loginErrorMessage } = useContext(AuthContext);
   const onSumbitHandler = (data) => {
     login(data.email, data.password);
   };

@@ -117,6 +117,19 @@ const AppStack = (props) => {
             ),
           }}
         />
+        <Drawer.Screen
+          name="Chats"
+          component={GroupsStack}
+          options={{
+            drawerIcon: ({ color }) => (
+              <Ionicons
+                name="chatbubbles-outline"
+                size={25}
+                color={Colors.primaryLight}
+              />
+            ),
+          }}
+        />
       </Drawer.Navigator>
     </WebSocketProvider>
   );

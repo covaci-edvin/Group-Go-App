@@ -3,13 +3,14 @@ import React from "react";
 import tw from "twrnc";
 import { Colors } from "../../styles/colors";
 
-const StartRouteButton = () => {
+const StartRouteButton = ({ onPress }) => {
   return (
     <TouchableOpacity
       style={[
         tw`items-center justify-center rounded-3xl shadow-md`,
         styles.button,
       ]}
+      onPress={onPress}
     >
       <Text style={[tw`text-base`, styles.text]}>START</Text>
     </TouchableOpacity>

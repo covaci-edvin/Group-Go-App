@@ -25,6 +25,14 @@ export const invitedRouteSlice = createSlice({
     setInvitedRouteDestination: (state, action) => {
       state.destination = action.payload;
     },
+    addJoinedMember: (state, action) => {
+      state.joinedMembers.push(action.payload);
+    },
+    removeJoinedMember: (state, action) => {
+      state.joinedMembers = state.joinedMembers.filter(
+        (member) => member.id !== action.payload
+      );
+    },
     setInvitedRouteGroupId: (state, action) => {
       state.groupId = action.payload;
     },
@@ -34,6 +42,7 @@ export const invitedRouteSlice = createSlice({
       state.groupName = null;
       state.destination = null;
       state.groupId = null;
+      state.joinedMembers = [];
     },
   },
 });
@@ -44,6 +53,8 @@ export const {
   setInvitedRouteAdminName,
   setInvitedRouteGroupName,
   setInvitedRouteGroupId,
+  addJoinedMember,
+  removeJoinedMember,
   clearInvitedRoute,
 } = invitedRouteSlice.actions;
 
@@ -55,5 +66,6 @@ export const selectInvitedRouteAdminId = (state) => state.invitedRoute.adminId;
 export const selectInvitedRouteGroupName = (state) =>
   state.invitedRoute.groupName;
 export const selectInvitedRouteGroupId = (state) => state.invitedRoute.groupId;
+export const selectJoinedMembers = (state) => state.invitedRoute.joinedMembers;
 
 export default invitedRouteSlice.reducer;

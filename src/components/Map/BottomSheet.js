@@ -15,24 +15,46 @@ import { Colors } from "../../styles/colors";
 import { useSelector } from "react-redux";
 import { selectDestination } from "../../slices/navigationSlice";
 import DestinationInfo from "./DestinationInfo";
-import { selectUserJoined } from "../../slices/uiToggleSlice";
+import {
+  selectGroupRouteStarted,
+  selectRouteStarted,
+  selectUserJoined,
+} from "../../slices/uiToggleSlice";
 import GroupRouteInfo from "./GroupRouteInfo";
+import RouteStarted from "./RouteStarted";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const BottomSheetContent = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
+  const routeStarted = useSelector(selectRouteStarted);
+  const groupRouteStarted = useSelector(selectGroupRouteStarted);
 
-  return destination.coordinates.latitude ? (
-    <DestinationInfo mapRef={mapRef} />
+  if (!routeStarted) {
+    return destination.coordinates.latitude ? (
+      <DestinationInfo mapRef={mapRef} />
+    ) : (
+      <DestinationSearch />
+    );
+  } else {
+    return <RouteStarted mapRef={mapRef} />;
+  }
+};
+
+const GroupRoute = ({ mapRef }) => {
+  const groupRouteStarted = useSelector(selectGroupRouteStarted);
+
+  return !groupRouteStarted ? (
+    <GroupRouteInfo mapRef={mapRef} />
   ) : (
-    <DestinationSearch />
+    <RouteStarted mapRef={mapRef} />
   );
 };
 
 const BottomSheet = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
   const userJoined = useSelector(selectUserJoined);
+  const routeStarted = useSelector(selectRouteStarted);
 
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
@@ -70,10 +92,11 @@ const BottomSheet = ({ mapRef }) => {
   }, []);
 
   useEffect(() => {
-    destination.coordinates.latitude && !userJoined
+    destination.coordinates.latitude && !userJoined && !routeStarted
       ? scrollTo(MID_TRANSLATE_Y, 50)
       : scrollTo(MIN_TRANSLATE_Y, 50);
     userJoined && scrollTo(USER_JOINED_TRANSLATE_Y, 50);
+    routeStarted && scrollTo(USER_JOINED_TRANSLATE_Y, 50);
     Keyboard.addListener("keyboardDidShow", () => {
       scrollTo(MAX_TRANSLATE_Y, 50);
     });
@@ -82,7 +105,7 @@ const BottomSheet = ({ mapRef }) => {
         ? scrollTo(MID_TRANSLATE_Y, 50)
         : scrollTo(MIN_TRANSLATE_Y, 50);
     });
-  }, [destination, userJoined]);
+  }, [destination, userJoined, routeStarted]);
 
   const rBottomSheetStyle = useAnimatedStyle(() => {
     return {
@@ -112,7 +135,7 @@ const BottomSheet = ({ mapRef }) => {
             {!userJoined ? (
               <BottomSheetContent mapRef={mapRef} />
             ) : (
-              <GroupRouteInfo mapRef={mapRef} />
+              <GroupRoute mapRef={mapRef} />
             )}
           </BlurView>
         </View>

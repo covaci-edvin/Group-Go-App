@@ -11,18 +11,20 @@ import { useSelector } from "react-redux";
 import { selectDestination, selectOrigin } from "../slices/navigationSlice";
 import { WebSocketContext } from "../context/WebSocketContext";
 import { selectGroups } from "../slices/groupsSlice";
+import SideGroupRouteStatusBar from "../components/Map/SideGroupRouteStatusBar";
+import { selectGroupRouteStarted } from "../slices/uiToggleSlice";
 
 const MapScreen = (props) => {
   const destination = useSelector(selectDestination);
   const { groups } = useSelector(selectGroups);
   const { joinRooms } = useContext(WebSocketContext);
   const origin = useSelector(selectOrigin);
+  const groupRouteStarted = useSelector(selectGroupRouteStarted);
 
   const [routeCoordinates, setRouteCoordinates] = useState();
   const mapRef = useRef();
 
   useEffect(() => {
-    console.log(groups.length);
     joinRooms(groups);
   }, [groups]);
 
@@ -52,7 +54,7 @@ const MapScreen = (props) => {
       {!destination.coordinates.latitude && (
         <BottomControls navigation={props.navigation} />
       )}
-      {/* <SocketioTest /> */}
+      {groupRouteStarted && <SideGroupRouteStatusBar />}
     </View>
   );
 };

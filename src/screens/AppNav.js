@@ -1,20 +1,16 @@
-import {
-  StyleSheet,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  View,
-} from "react-native";
+import { StyleSheet, KeyboardAvoidingView, View } from "react-native";
 import React, { useContext, useEffect } from "react";
 import AppStack from "../navigation/AppStack";
 import AuthStack from "../navigation/AuthStack";
 import { AuthContext } from "../context/AuthContext";
-import SocketioTest from "../components/Map/SocketioTest";
+import Loader from "../components/UI/Loader";
+import { Colors } from "../styles/colors";
 import { useSelector } from "react-redux";
 import { selectGroups } from "../slices/groupsSlice";
-import { WebSocketContext } from "../context/WebSocketContext";
 
 const AppNav = () => {
   const { isLoading, userToken, getGroups } = useContext(AuthContext);
+  const { groups } = useSelector(selectGroups);
 
   useEffect(() => {
     if (userToken) {
@@ -23,8 +19,15 @@ const AppNav = () => {
   }, [userToken]);
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={"large"}></ActivityIndicator>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: Colors.primaryDarkLighter,
+        }}
+      >
+        <Loader />
       </View>
     );
   }

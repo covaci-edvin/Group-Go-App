@@ -116,11 +116,11 @@ export const MapStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#232323",
+        color: "#39575e",
       },
-      {
-        visibility: "simplified",
-      },
+      // {
+      //   visibility: "simplified",
+      // },
     ],
   },
   {

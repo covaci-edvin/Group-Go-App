@@ -60,7 +60,6 @@ const AppStack = (props) => {
         dispatch(toggleIsGroupSelected(true));
       }
     });
-
     dispatch(setUserJoined(true));
     dispatch(setIsUserInvited(false));
   };
@@ -72,7 +71,7 @@ const AppStack = (props) => {
         isVisible={isUserInvited}
         name={inviteRouteGroupName}
         title={"Invitation"}
-        message={`${inviteRouteAdminName} invited you to the group:`}
+        message={`${inviteRouteAdminName} invited you to a route`}
         onDeclineHandler={onDeclineHandler}
         onJoinHandler={onJoinHandler}
       />

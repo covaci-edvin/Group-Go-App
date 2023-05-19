@@ -7,6 +7,7 @@ const initialState = {
   destination: null,
   groupId: null,
   joinedMembers: [],
+  joinedMembersCoordinates: [],
 };
 
 export const invitedRouteSlice = createSlice({
@@ -33,6 +34,9 @@ export const invitedRouteSlice = createSlice({
         (member) => member.id !== action.payload
       );
     },
+    setJoinedMembersCoordinates: (state, action) => {
+      state.joinedMembersCoordinates.push(action.payload);
+    },
     setInvitedRouteGroupId: (state, action) => {
       state.groupId = action.payload;
     },
@@ -43,6 +47,7 @@ export const invitedRouteSlice = createSlice({
       state.destination = null;
       state.groupId = null;
       state.joinedMembers = [];
+      state.joinedMembersCoordinates = [];
     },
   },
 });
@@ -54,6 +59,7 @@ export const {
   setInvitedRouteGroupName,
   setInvitedRouteGroupId,
   addJoinedMember,
+  setJoinedMembersCoordinates,
   removeJoinedMember,
   clearInvitedRoute,
 } = invitedRouteSlice.actions;
@@ -67,5 +73,7 @@ export const selectInvitedRouteGroupName = (state) =>
   state.invitedRoute.groupName;
 export const selectInvitedRouteGroupId = (state) => state.invitedRoute.groupId;
 export const selectJoinedMembers = (state) => state.invitedRoute.joinedMembers;
+export const selectJoinedMembersCoordinates = (state) =>
+  state.invitedRoute.joinedMembersCoordinates;
 
 export default invitedRouteSlice.reducer;

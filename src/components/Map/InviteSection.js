@@ -17,12 +17,15 @@ import {
 } from "../../slices/uiToggleSlice";
 import StartRouteButton from "./StartRouteButton";
 import WaitingToJoin from "./WaitingToJoin";
+import { selectOrigin } from "../../slices/navigationSlice";
 
 const InviteSection = ({ destination }) => {
-  const { sendInvitation, groupRouteStarted } = useContext(WebSocketContext);
+  const { sendInvitation, groupRouteStarted, broadcastLocationData } =
+    useContext(WebSocketContext);
   const { userInfo } = useContext(AuthContext);
   const { selectedGroup } = useSelector(selectSelectedGroup);
   const joinedMembers = useSelector(selectJoinedMembers);
+  const origin = useSelector(selectOrigin);
   const isInvitationSent = useSelector(selectInvitationSent);
   const dispatch = useDispatch();
 
@@ -30,6 +33,7 @@ const InviteSection = ({ destination }) => {
     groupRouteStarted(selectedGroup.id);
     dispatch(setGroupRouteStarted(true));
     dispatch(setRouteStarted(true));
+    broadcastLocationData(selectedGroup.id, origin);
   };
 
   return (

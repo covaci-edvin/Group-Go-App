@@ -18,7 +18,6 @@ const MapScreen = (props) => {
   const destination = useSelector(selectDestination);
   const { groups } = useSelector(selectGroups);
   const { joinRooms } = useContext(WebSocketContext);
-  const origin = useSelector(selectOrigin);
   const groupRouteStarted = useSelector(selectGroupRouteStarted);
 
   const [routeCoordinates, setRouteCoordinates] = useState();

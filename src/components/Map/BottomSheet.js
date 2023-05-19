@@ -1,5 +1,5 @@
 import { StyleSheet, Keyboard, View, Platform } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import tw from "twrnc";
 import { Dimensions } from "react-native";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
@@ -13,7 +13,7 @@ import Animated, {
 import DestinationSearch from "./DestinationSearch";
 import { Colors } from "../../styles/colors";
 import { useSelector } from "react-redux";
-import { selectDestination } from "../../slices/navigationSlice";
+import { selectDestination, selectOrigin } from "../../slices/navigationSlice";
 import DestinationInfo from "./DestinationInfo";
 import {
   selectGroupRouteStarted,
@@ -22,13 +22,14 @@ import {
 } from "../../slices/uiToggleSlice";
 import GroupRouteInfo from "./GroupRouteInfo";
 import RouteStarted from "./RouteStarted";
+import { WebSocketContext } from "../../context/WebSocketContext";
+import { selectInvitedRouteGroupId } from "../../slices/invitedRouteSlice";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const BottomSheetContent = ({ mapRef }) => {
   const destination = useSelector(selectDestination);
   const routeStarted = useSelector(selectRouteStarted);
-  const groupRouteStarted = useSelector(selectGroupRouteStarted);
 
   if (!routeStarted) {
     return destination.coordinates.latitude ? (
@@ -43,6 +44,12 @@ const BottomSheetContent = ({ mapRef }) => {
 
 const GroupRoute = ({ mapRef }) => {
   const groupRouteStarted = useSelector(selectGroupRouteStarted);
+  const origin = useSelector(selectOrigin);
+  const invitedRouteGroupId = useSelector(selectInvitedRouteGroupId);
+  const { responseLocationBroadcast } = useContext(WebSocketContext);
+  useEffect(() => {
+    groupRouteStarted && responseLocationBroadcast(invitedRouteGroupId, origin);
+  }, [groupRouteStarted]);
 
   return !groupRouteStarted ? (
     <GroupRouteInfo mapRef={mapRef} />

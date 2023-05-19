@@ -140,7 +140,6 @@ export const AuthProvider = ({ children }) => {
         },
       })
       .then((res) => {
-        console.log("getGroups");
         dispatch(setGroups(res.data.data.data));
       })
       .catch((err) => {

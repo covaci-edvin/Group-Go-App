@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import MapViewDirections from "react-native-maps-directions";
@@ -21,16 +21,29 @@ import { MapStyles } from "../../styles/mapStyles";
 import { mapPadding } from "../../styles/mapPadding";
 import { Colors } from "../../styles/colors";
 import { toHoursAndMinutes } from "../../utils/MinutesToHours";
-import MyLocationButton from "./MyLocationButton";
+import {
+  selectJoinedMembers,
+  selectJoinedMembersCoordinates,
+} from "../../slices/invitedRouteSlice";
+import { AuthContext } from "../../context/AuthContext";
+import {
+  selectGroupRouteStarted,
+  selectRouteStarted,
+} from "../../slices/uiToggleSlice";
+import GroupRoutes from "./GroupRoutes";
+import GroupMarker from "./GroupMarker";
 
 const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
-  // const mapRef = useRef(null);
   const destination = useSelector(selectDestination);
+  const { userInfo } = useContext(AuthContext);
   const transport = useSelector(selectTransport);
   const origin = useSelector(selectOrigin);
+  const joinedMembersCoordinates = useSelector(selectJoinedMembersCoordinates);
+  const joinedMembers = useSelector(selectJoinedMembers);
   const [hasLoaded, setHasLoaded] = useState();
   const dispatch = useDispatch();
-
+  const groupRouteStarted = useSelector(selectGroupRouteStarted);
+  const routeStarted = useSelector(selectRouteStarted);
   const [currentLocation, setCurrentLocation] = useState({
     latitude: null,
     longitude: null,
@@ -50,10 +63,13 @@ const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
   };
 
   const onUserLocationChange = (location) => {
-    setOrigin({
-      latitude: location.nativeEvent.coordinate.latitude,
-      longitude: location.nativeEvent.coordinate.longitude,
-    });
+    // console.log("🚀");
+    // setOrigin({
+    //   coordinates: {
+    //     latitude: location.nativeEvent.coordinate.latitude,
+    //     longitude: location.nativeEvent.coordinate.longitude,
+    //   },
+    // });
   };
 
   useEffect(() => {
@@ -102,36 +118,47 @@ const Map = ({ mapRef, setRouteCoordinates, centerRoute }) => {
         loadingIndicatorColor={Colors.primaryShade}
         onUserLocationChange={onUserLocationChange}
         onPress={(e) => {
-          dispatch(
-            setDestination({
-              coordinates: {
-                latitude: e.nativeEvent.coordinate.latitude,
-                longitude: e.nativeEvent.coordinate.longitude,
-              },
-              description: e.nativeEvent.name
-                ? e.nativeEvent.name
-                : `${e.nativeEvent.coordinate.latitude}, ${e.nativeEvent.coordinate.longitude}`,
-            })
-          );
+          !groupRouteStarted &&
+            !routeStarted &&
+            dispatch(
+              setDestination({
+                coordinates: {
+                  latitude: e.nativeEvent.coordinate.latitude,
+                  longitude: e.nativeEvent.coordinate.longitude,
+                },
+                description: e.nativeEvent.name
+                  ? e.nativeEvent.name
+                  : `${e.nativeEvent.coordinate.latitude}, ${e.nativeEvent.coordinate.longitude}`,
+              })
+            );
         }}
         onPoiClick={(e) => {
-          dispatch(
-            setDestination({
-              coordinates: {
-                latitude: e.nativeEvent.coordinate.latitude,
-                longitude: e.nativeEvent.coordinate.longitude,
-              },
-              description: e.nativeEvent.name,
-            })
-          );
+          !groupRouteStarted &&
+            dispatch(
+              setDestination({
+                coordinates: {
+                  latitude: e.nativeEvent.coordinate.latitude,
+                  longitude: e.nativeEvent.coordinate.longitude,
+                },
+                description: e.nativeEvent.name,
+              })
+            );
         }}
       >
+        <GroupRoutes
+          joinedMembers={joinedMembersCoordinates}
+          members={joinedMembers}
+          destination={destination.coordinates}
+        />
+        <GroupMarker joinedMembers={joinedMembersCoordinates} />
+
         {origin && destination.coordinates.latitude && (
           <MapViewDirections
+            key={userInfo.user.id}
             origin={origin.coordinates}
             destination={destination.coordinates}
             apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={4}
+            strokeWidth={6}
             strokeColor={Colors.primaryShade}
             timePrecision="now"
             precision="high"

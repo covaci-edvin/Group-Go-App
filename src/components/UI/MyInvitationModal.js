@@ -7,7 +7,12 @@ import { Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { WebSocketContext } from "../../context/WebSocketContext";
 import { useSelector } from "react-redux";
-import { selectInvitedRouteAdminId } from "../../slices/invitedRouteSlice";
+import {
+  selectInvitedRouteAdminId,
+  selectInvitedRouteGroupId,
+} from "../../slices/invitedRouteSlice";
+import { selectSelectedGroup } from "../../slices/selectedGroupSlice";
+import { selectOrigin } from "../../slices/navigationSlice";
 
 const MyInvitationModal = ({
   isVisible,
@@ -18,8 +23,12 @@ const MyInvitationModal = ({
   onJoinHandler,
   onDeclineHandler,
 }) => {
-  const { joinGroupRoute } = useContext(WebSocketContext);
+  const { joinGroupRoute, responseLocationBroadCast } =
+    useContext(WebSocketContext);
   const invitedRouteAdminId = useSelector(selectInvitedRouteAdminId);
+  const invitedRouteGroupId = useSelector(selectInvitedRouteGroupId);
+  const selectedGroup = useSelector(selectSelectedGroup);
+  const origin = useSelector(selectOrigin);
 
   return (
     <Modal
@@ -81,6 +90,10 @@ const MyInvitationModal = ({
             onPress={() => {
               onJoinHandler();
               joinGroupRoute(invitedRouteAdminId);
+              // responseLocationBroadCast(
+              //   invitedRouteGroupId,
+              //   origin.coordinates
+              // );
             }}
             activeOpacity={0.8}
             style={[
